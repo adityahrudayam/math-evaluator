@@ -3,13 +3,13 @@
 #include <string>
 #include "BigInteger.hpp"
 
-// inline static void preprocessAndValidate(string &s);
+// inline static void preprocessAndValidate(string &);
 
-inline static uc getFunction(const string &s);
+inline static uc getFunction(const string &);
 
-// inline static ld performOperation(const ld &x, const uc &op, const ld &y);
+// inline static ld performOperation(const ld &, const uc &, const ld &);
 
-inline static BigInteger performOperation(BigInteger &b, BigInteger &a, const string &op);
+inline static BigInteger performOperation(BigInteger &, BigInteger &, const string &);
 
 /**
  * Parameters:
@@ -17,4 +17,4 @@ inline static BigInteger performOperation(BigInteger &b, BigInteger &a, const st
  * Returns:
  * The function evaluates an expression & returns a BigInteger.
  */
-BigInteger evaluateExpression(string s) noexcept;
+BigInteger evaluateExpression(string) noexcept;

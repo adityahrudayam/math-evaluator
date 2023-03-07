@@ -55,7 +55,7 @@ BigInteger::BigInteger(const char *s)
     }
 }
 
-BigInteger::BigInteger(string s)
+BigInteger::BigInteger(string &s)
 {
     ui N = static_cast<ui>(s.length());
     if (s[0] == '-')
@@ -156,6 +156,58 @@ inline BigInteger BigInteger::SubtractionHelper(BigInteger &o, const ui &M, cons
     }
 }
 
+inline BigInteger BigInteger::SubtractionHelper(const BigInteger &o, const ui &M, const ui &N)
+{
+    if (*this < o)
+    {
+        string curr = o.Num;
+        char carry = 0;
+        for (int i = 0; i < N; i++)
+        {
+            char dig;
+            if (i < M)
+                dig = carry + curr[i] - Num[i];
+            else
+                dig = carry + curr[i] - '0';
+            if (dig < 0)
+            {
+                carry = -1;
+                dig += 10;
+            }
+            else
+                carry = 0;
+            curr[i] = dig + '0';
+        }
+        while (curr.back() == '0')
+            curr.pop_back();
+        return BigInteger(o.Sign, curr);
+    }
+    else
+    {
+        string curr = this->Num;
+        char carry = 0;
+        for (int i = 0; i < M; i++)
+        {
+            char dig;
+            if (i < N)
+                dig = carry + curr[i] - o[i];
+            else
+                dig = carry + curr[i] - '0';
+            if (dig < 0)
+            {
+                carry = -1;
+                dig += 10;
+            }
+            else
+                carry = 0;
+            curr[i] = dig + '0';
+        }
+        while (curr.back() == '0')
+            curr.pop_back();
+        return BigInteger(this->Sign, curr);
+    }
+}
+
 bool BigInteger::IsNull() const
 {
     if (Num == "0" || Num.empty() || Num[0] == 0)
@@ -166,6 +218,27 @@ bool BigInteger::IsNull() const
 const ui BigInteger::Length() const
 {
     return static_cast<ui>(Num.length());
+}
+
+BigInteger BigInteger::Add(const BigInteger &o)
+{
+    const ui M = Length(), N = o.Length();
+    if (this->Sign != o.Sign)
+        return SubtractionHelper(o, M, N);
+    uc carry = 0;
+    string res;
+    const ui len = std::max(M, N);
+    res.reserve(len + 1);
+    for (ui i = 0; i < len; i++)
+    {
+        uc x1 = i < M ? Num[i] - '0' : 0, x2 = i < N ? o[i] - '0' : 0;
+        uc sum = (x1 + x2 + carry) % 10;
+        res.push_back(sum + '0');
+        carry = (x1 + x2 + carry) / 10;
+    }
+    if (carry)
+        res.push_back(carry + '0');
+    return BigInteger(this->Sign, res);
 }
 
 BigInteger BigInteger::Add(BigInteger &o)
@@ -187,6 +260,76 @@ BigInteger BigInteger::Add(BigInteger &o)
     if (carry)
         res.push_back(carry + '0');
     return BigInteger(this->Sign, res);
+}
+
+BigInteger BigInteger::Subtract(const BigInteger &o)
+{
+    const ui M = Length(), N = o.Length();
+    if (this->Sign != o.Sign)
+    {
+        uc carry = 0;
+        string res;
+        const ui len = std::max(M, N);
+        res.reserve(len + 1);
+        for (ui i = 0; i < len; i++)
+        {
+            uc x1 = i < M ? Num[i] - '0' : 0, x2 = i < N ? o[i] - '0' : 0;
+            uc sum = (x1 + x2 + carry) % 10;
+            res.push_back(sum + '0');
+            carry = (x1 + x2 + carry) / 10;
+        }
+        if (carry)
+            res.push_back(carry + '0');
+        return BigInteger(this->Sign, res);
+    }
+    if (*this < o)
+    {
+        string curr = o.Num;
+        char carry = 0;
+        for (int i = 0; i < N; i++)
+        {
+            char dig;
+            if (i < M)
+                dig = carry + curr[i] - Num[i];
+            else
+                dig = carry + curr[i] - '0';
+            if (dig < 0)
+            {
+                carry = -1;
+                dig += 10;
+            }
+            else
+                carry = 0;
+            curr[i] = dig + '0';
+        }
+        while (curr.back() == '0')
+            curr.pop_back();
+        return BigInteger(1 - o.Sign, curr);
+    }
+    else
+    {
+        string curr = this->Num;
+        char carry = 0;
+        for (int i = 0; i < M; i++)
+        {
+            char dig;
+            if (i < N)
+                dig = carry + curr[i] - o[i];
+            else
+                dig = carry + curr[i] - '0';
+            if (dig < 0)
+            {
+                carry = -1;
+                dig += 10;
+            }
+            else
+                carry = 0;
+            curr[i] = dig + '0';
+        }
+        while (curr.back() == '0')
+            curr.pop_back();
+        return BigInteger(this->Sign, curr);
+    }
 }
 
 BigInteger BigInteger::Subtract(BigInteger &o)
@@ -259,9 +402,31 @@ BigInteger BigInteger::Subtract(BigInteger &o)
     }
 }
 
+BigInteger BigInteger::Multiply(const BigInteger &o)
+{
+    if (*this == "0" || o.GetNum() == "0")
+        return BigInteger(Sign, "0");
+    const ui M = Length(), N = o.Length();
+    string res(M + N, '0');
+    for (ui j = 0; j < N; j++)
+    {
+        for (ui i = 0; i < M; i++)
+        {
+            const ui pos = i + j;
+            const uc mult = (Num[i] - '0') * (o[j] - '0') + res[pos] - '0';
+            res[pos] = mult % 10 + '0';
+            res[pos + 1] += mult / 10;
+        }
+    }
+    if (res.back() == '0')
+        res.pop_back();
+    uc numSign = this->Sign != o.Sign ? 1 : 0;
+    return BigInteger(numSign, res);
+}
+
 BigInteger BigInteger::Multiply(BigInteger &o)
 {
-    if (*this == "0" || o == "0")
+    if (*this == "0" || o.GetNum() == "0")
         return BigInteger(Sign, "0");
     const ui M = Length(), N = o.Length();
     string res(M + N, '0');
@@ -355,6 +520,11 @@ inline const uc BigInteger::operator[](const ui &i) const
     return Num[i];
 }
 
+BigInteger BigInteger::operator+(const BigInteger &o)
+{
+    return Add(o);
+}
+
 BigInteger BigInteger::operator+(BigInteger &o)
 {
     return Add(o);
@@ -366,9 +536,19 @@ BigInteger BigInteger::operator+(const ll &o)
     return Add(temp);
 }
 
+BigInteger BigInteger::operator-(const BigInteger &o)
+{
+    return Subtract(o);
+}
+
 BigInteger BigInteger::operator-(BigInteger &o)
 {
     return Subtract(o);
+}
+
+BigInteger BigInteger::operator*(const BigInteger &o)
+{
+    return Multiply(o);
 }
 
 BigInteger BigInteger::operator*(BigInteger &o)
@@ -485,6 +665,17 @@ bool BigInteger::operator!=(BigInteger &o)
     return !(*this == o);
 }
 
+bool BigInteger::operator<(const BigInteger &o)
+{
+    ui M = Length(), N = o.Length();
+    if (M != N)
+        return M < N;
+    while (M--)
+        if (Num[M] != o[M])
+            return Num[M] < o[M];
+    return false;
+}
+
 bool BigInteger::operator<(BigInteger &o)
 {
     ui M = Length(), N = o.Length();
@@ -546,6 +737,11 @@ BigInteger &BigInteger::operator=(const BigInteger &o)
     return *this;
 }
 
+BigInteger &BigInteger::operator+=(const BigInteger &o)
+{
+    return *this = Add(o);
+}
+
 BigInteger &BigInteger::operator+=(BigInteger &o)
 {
     return *this = Add(o);
@@ -557,6 +753,11 @@ BigInteger &BigInteger::operator+=(const ll &o)
     return *this = Add(temp);
 }
 
+BigInteger &BigInteger::operator-=(const BigInteger &o)
+{
+    return *this = Subtract(o);
+}
+
 BigInteger &BigInteger::operator-=(BigInteger &o)
 {
     return *this = Subtract(o);
@@ -566,6 +767,11 @@ BigInteger &BigInteger::operator-=(const ll &o)
 {
     BigInteger temp(o);
     return *this = Subtract(temp);
+}
+
+BigInteger &BigInteger::operator*=(const BigInteger &o)
+{
+    return *this = Multiply(o);
 }
 
 BigInteger &BigInteger::operator*=(BigInteger &o)

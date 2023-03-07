@@ -68,6 +68,44 @@ MatrixLD multiplyAndGetResult(vector<MatrixLD> &vec)
     return matrixExpEval(order, vec);
 }
 
+MatrixLL multiplyAndGetResult(vector<MatrixLL> &vec)
+{
+    if (vec.empty())
+        return MatrixLL();
+    const ui N = static_cast<ui>(vec.size());
+    uc *dim = new uc[N + 1];
+    dim[0] = vec[0].GetM();
+    for (int i = 1; i < N; i++)
+    {
+        if (vec[i].GetM() != vec[i - 1].GetN())
+            throw "bad input! cannot multiply the matrices.";
+        dim[i] = vec[i].GetM();
+    }
+    dim[N] = vec[N - 1].GetN();
+    string order = findOrderOfMinOps(dim, N + 1);
+    delete[] dim;
+    return matrixExpEval(order, vec);
+}
+
+MatrixBigInteger multiplyAndGetResult(vector<MatrixBigInteger> &vec)
+{
+    if (vec.empty())
+        return MatrixBigInteger();
+    const ui N = static_cast<ui>(vec.size());
+    uc *dim = new uc[N + 1];
+    dim[0] = vec[0].GetM();
+    for (int i = 1; i < N; i++)
+    {
+        if (vec[i].GetM() != vec[i - 1].GetN())
+            throw "bad input! cannot multiply the matrices.";
+        dim[i] = vec[i].GetM();
+    }
+    dim[N] = vec[N - 1].GetN();
+    string order = findOrderOfMinOps(dim, N + 1);
+    delete[] dim;
+    return matrixExpEval(order, vec);
+}
+
 MatrixLD matrixExpEval(string &s, vector<MatrixLD> &vec)
 {
     const ui N = static_cast<ui>(s.length());
@@ -133,6 +171,136 @@ MatrixLD matrixExpEval(string &s, vector<MatrixLD> &vec)
     return operands.top();
 }
 
+MatrixLL matrixExpEval(string &s, vector<MatrixLL> &vec)
+{
+    const ui N = static_cast<ui>(s.length());
+    stack<char> operators;
+    stack<MatrixLL> operands;
+    int i = 0;
+    while (i < N)
+    {
+        if (s[i] == '(')
+        {
+            operators.push('(');
+            i++;
+        }
+        else if (s[i] == ')')
+        {
+            while (!operators.empty() && operators.top() != '(')
+            {
+                char op = operators.top();
+                operators.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixLL n2 = operands.top();
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixLL n1 = operands.top();
+                operands.pop();
+                operands.push(performOperation(n1, n2, op));
+            }
+            operators.pop();
+            i++;
+        }
+        else if (s[i] >= '0' && s[i] <= '9')
+        {
+            string substr;
+            while (i < N && s[i] >= '0' && s[i] <= '9')
+                substr.push_back(s[i++]);
+            operands.push(vec[stoi(substr)]);
+        }
+        else if (s[i] == '+' || s[i] == '-' || s[i] == '*')
+        {
+            while (!operators.empty() && (operators.top() == '*' || s[i] != '*'))
+            {
+                char op = operators.top();
+                operators.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixLL n2 = operands.top();
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixLL n1 = operands.top();
+                operands.pop();
+                operands.push(performOperation(n1, n2, op));
+            }
+            operators.push(s[i++]);
+        }
+        else
+            throw "bad input!";
+    }
+    if (!operators.empty() || operands.empty() || operands.size() > 1)
+        throw "bad input!";
+    return operands.top();
+}
+
+MatrixBigInteger matrixExpEval(string &s, vector<MatrixBigInteger> &vec)
+{
+    const ui N = static_cast<ui>(s.length());
+    stack<char> operators;
+    stack<MatrixBigInteger> operands;
+    int i = 0;
+    while (i < N)
+    {
+        if (s[i] == '(')
+        {
+            operators.push('(');
+            i++;
+        }
+        else if (s[i] == ')')
+        {
+            while (!operators.empty() && operators.top() != '(')
+            {
+                char op = operators.top();
+                operators.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixBigInteger n2 = operands.top();
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixBigInteger n1 = operands.top();
+                operands.pop();
+                operands.push(performOperation(n1, n2, op));
+            }
+            operators.pop();
+            i++;
+        }
+        else if (s[i] >= '0' && s[i] <= '9')
+        {
+            string substr;
+            while (i < N && s[i] >= '0' && s[i] <= '9')
+                substr.push_back(s[i++]);
+            operands.push(vec[stoi(substr)]);
+        }
+        else if (s[i] == '+' || s[i] == '-' || s[i] == '*')
+        {
+            while (!operators.empty() && (operators.top() == '*' || s[i] != '*'))
+            {
+                char op = operators.top();
+                operators.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixBigInteger n2 = operands.top();
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                MatrixBigInteger n1 = operands.top();
+                operands.pop();
+                operands.push(performOperation(n1, n2, op));
+            }
+            operators.push(s[i++]);
+        }
+        else
+            throw "bad input!";
+    }
+    if (!operators.empty() || operands.empty() || operands.size() > 1)
+        throw "bad input!";
+    return operands.top();
+}
+
 MatrixLD performOperation(const MatrixLD &n1, const MatrixLD &n2, char &op)
 {
     switch (op)
@@ -148,7 +316,37 @@ MatrixLD performOperation(const MatrixLD &n1, const MatrixLD &n2, char &op)
     }
 }
 
-void takeInputAndEval()
+MatrixLL performOperation(const MatrixLL &n1, const MatrixLL &n2, char &op)
+{
+    switch (op)
+    {
+    case '+':
+        return n1.Add(n2);
+    case '-':
+        return n1.Subtract(n2);
+    case '*':
+        return n1.Multiply(n2);
+    default:
+        throw "bad input!";
+    }
+}
+
+MatrixBigInteger performOperation(const MatrixBigInteger &n1, const MatrixBigInteger &n2, char &op)
+{
+    switch (op)
+    {
+    case '+':
+        return n1.Add(n2);
+    case '-':
+        return n1.Subtract(n2);
+    case '*':
+        return n1.Multiply(n2);
+    default:
+        throw "bad input!";
+    }
+}
+
+void takeInputAndEvalLD()
 {
     try
     {
@@ -164,6 +362,70 @@ void takeInputAndEval()
                 for (int j = 0; j < N; j++)
                     cin >> s[j + i * N];
             vec.push_back(MatrixLD(M, N, s));
+        }
+        cout << multiplyAndGetResult(vec) << endl;
+    }
+    catch (string e)
+    {
+        cout << e << endl;
+    }
+    catch (...)
+    {
+        cout << "bad input!" << endl;
+    }
+}
+
+void takeInputAndEvalLL()
+{
+    try
+    {
+        int size;
+        cin >> size;
+        vector<MatrixLL> vec;
+        while (size-- > 0)
+        {
+            int M, N;
+            cin >> M >> N;
+            ll *s = new ll[M * N];
+            for (int i = 0; i < M; i++)
+                for (int j = 0; j < N; j++)
+                    cin >> s[j + i * N];
+            vec.push_back(MatrixLL(M, N, s));
+        }
+        cout << multiplyAndGetResult(vec) << endl;
+    }
+    catch (string e)
+    {
+        cout << e << endl;
+    }
+    catch (...)
+    {
+        cout << "bad input!" << endl;
+    }
+}
+
+void takeInputAndEvalBI()
+{
+    try
+    {
+        int size;
+        cin >> size;
+        vector<MatrixBigInteger> vec;
+        while (size-- > 0)
+        {
+            int M, N;
+            cin >> M >> N;
+            BigInteger *s = new BigInteger[M * N];
+            for (int i = 0; i < M; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    string num;
+                    cin >> num;
+                    new (&(s[j + i * N])) BigInteger(num);
+                }
+            }
+            vec.push_back(MatrixBigInteger(M, N, s));
         }
         cout << multiplyAndGetResult(vec) << endl;
     }

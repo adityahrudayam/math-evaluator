@@ -19,6 +19,8 @@ private:
 
     inline BigInteger SubtractionHelper(BigInteger &, const ui &, const ui &);
 
+    inline BigInteger SubtractionHelper(const BigInteger &, const ui &, const ui &);
+
     string BuildNumStr(ll &);
 
 public:
@@ -28,7 +30,7 @@ public:
 
     explicit BigInteger(const char *);
 
-    explicit BigInteger(string);
+    explicit BigInteger(string &);
 
     explicit BigInteger(uc, string);
 
@@ -38,9 +40,15 @@ public:
 
     const ui Length() const;
 
+    BigInteger Add(const BigInteger &);
+
     BigInteger Add(BigInteger &);
 
+    BigInteger Subtract(const BigInteger &);
+
     BigInteger Subtract(BigInteger &);
+
+    BigInteger Multiply(const BigInteger &);
 
     BigInteger Multiply(BigInteger &);
 
@@ -59,9 +67,12 @@ public:
 
     inline const uc operator[](const ui &) const;
 
+    BigInteger operator+(const BigInteger &);
     BigInteger operator+(BigInteger &);
     BigInteger operator+(const ll &);
+    BigInteger operator-(const BigInteger &);
     BigInteger operator-(BigInteger &);
+    BigInteger operator*(const BigInteger &);
     BigInteger operator*(BigInteger &);
     BigInteger operator*(const ll &);
     BigInteger operator/(BigInteger &);
@@ -75,6 +86,7 @@ public:
     bool operator==(BigInteger &);
     bool operator==(const char *);
     bool operator!=(BigInteger &);
+    bool operator<(const BigInteger &);
     bool operator<(BigInteger &);
     bool operator<(const string &);
     bool operator>(BigInteger &);
@@ -83,10 +95,13 @@ public:
     bool operator>=(BigInteger &);
 
     BigInteger &operator=(const BigInteger &);
+    BigInteger &operator+=(const BigInteger &);
     BigInteger &operator+=(BigInteger &);
     BigInteger &operator+=(const ll &);
+    BigInteger &operator-=(const BigInteger &);
     BigInteger &operator-=(BigInteger &);
     BigInteger &operator-=(const ll &);
+    BigInteger &operator*=(const BigInteger &);
     BigInteger &operator*=(BigInteger &);
     BigInteger &operator*=(const ll &);
     BigInteger &operator/=(BigInteger &);

@@ -6,15 +6,31 @@
 
 using std::vector;
 
-string findOrderOfMinOps(uc dim[], ui N);
+string findOrderOfMinOps(uc[], ui);
 
 MatrixLD multiplyAndGetResult(vector<MatrixLD> &);
 
+MatrixLL multiplyAndGetResult(vector<MatrixLL> &);
+
+MatrixBigInteger multiplyAndGetResult(vector<MatrixBigInteger> &);
+
 MatrixLD matrixExpEval(string &, vector<MatrixLD> &);
+
+MatrixLL matrixExpEval(string &, vector<MatrixLL> &);
+
+MatrixBigInteger matrixExpEval(string &, vector<MatrixBigInteger> &);
 
 MatrixLD performOperation(const MatrixLD &, const MatrixLD &, char &);
 
-void takeInputAndEval();
+MatrixLL performOperation(const MatrixLL &, const MatrixLL &, char &);
+
+MatrixBigInteger performOperation(const MatrixBigInteger &, const MatrixBigInteger &, char &);
+
+void takeInputAndEvalLD();
+
+void takeInputAndEvalLL();
+
+void takeInputAndEvalBI();
 
 bool saveLDMToFile(const char *, MatrixLD &);
 
