@@ -8,23 +8,17 @@ using std::vector;
 
 string findOrderOfMinOps(uc[], ui);
 
-MatrixLD multiplyAndGetResult(vector<MatrixLD> &);
+template <class T>
+concept Matrix = std::is_same<T, MatrixLD>::value || std::is_same<T, MatrixLL>::value || std::is_same<T, MatrixBigInteger>::value;
 
-MatrixLL multiplyAndGetResult(vector<MatrixLL> &);
+template <Matrix T>
+T multiplyAndGetResult(vector<T> &);
 
-MatrixBigInteger multiplyAndGetResult(vector<MatrixBigInteger> &);
+template <Matrix T>
+T matrixExpEval(string &, vector<T> &);
 
-MatrixLD matrixExpEval(string &, vector<MatrixLD> &);
-
-MatrixLL matrixExpEval(string &, vector<MatrixLL> &);
-
-MatrixBigInteger matrixExpEval(string &, vector<MatrixBigInteger> &);
-
-MatrixLD performOperation(const MatrixLD &, const MatrixLD &, char &);
-
-MatrixLL performOperation(const MatrixLL &, const MatrixLL &, char &);
-
-MatrixBigInteger performOperation(const MatrixBigInteger &, const MatrixBigInteger &, char &);
+template <Matrix T>
+T performOperation(const T &, const T &, char &);
 
 void takeInputAndEvalLD();
 

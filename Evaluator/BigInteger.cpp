@@ -493,7 +493,7 @@ BigInteger BigInteger::Pow(BigInteger &o)
     return res;
 }
 
-const uc &BigInteger::GetSign() const
+const uc BigInteger::GetSign() const
 {
     return Sign;
 }
@@ -503,7 +503,7 @@ void BigInteger::SetSign(const uc &sign)
     this->Sign = sign;
 }
 
-const string &BigInteger::GetNum() const
+const string BigInteger::GetNum() const
 {
     return Num;
 }

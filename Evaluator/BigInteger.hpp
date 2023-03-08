@@ -57,11 +57,11 @@ public:
     BigInteger Pow(BigInteger &);
 
     // Getters & Setters
-    const uc &GetSign() const;
+    const uc GetSign() const;
 
     void SetSign(const uc &);
 
-    const string &GetNum() const;
+    const string GetNum() const;
 
     void SetNum(const string &);
 
