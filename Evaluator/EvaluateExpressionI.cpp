@@ -119,6 +119,15 @@ inline static ll performOperation(const ll &b, const ll &a, const std::string &o
             throw "bad input!";
         return a % b;
     case '^':
+        if (b < 0)
+        {
+            if (a == 0)
+                throw "bad input!";
+            if (a == 1)
+                return 1L;
+            else
+                return 0L;
+        }
         return powI(a, b);
     default:
         throw "bad input!";
@@ -172,7 +181,189 @@ inline static ll performOperation(const ll &x, const uc &op, const ll &y = 10)
 }
 
 // Evaluating any given expression with logarithmic, trigonometric functions - returning an int
-ll evaluateExpressionI(std::string s) noexcept
+ll evaluateExpressionI(std::string &s) noexcept
+{
+    try
+    {
+        preprocessAndValidate(s);
+        const ui N = static_cast<ui>(s.length());
+        if (N == 0)
+            return 0;
+        stack<std::string> operators;
+        stack<ll> operands;
+        ui i = 0;
+        while (i < N)
+        {
+            if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
+            {
+                ui j = i;
+                while (i < N && s[i] != '(')
+                    i++;
+                if (i == N)
+                {
+                    const char *e = "Wrong syntax or unknown symbols in the input!";
+                    cout << e << endl;
+                    throw e;
+                }
+                std::string op = s.substr(j, i - j);
+                getFunction(op);
+                operators.push(op);
+                operators.push("(");
+                i++;
+            }
+            else if (s[i] >= '0' && s[i] <= '9')
+            {
+                ui j = i;
+                while (i < N && s[i] >= '0' && s[i] <= '9')
+                    i++;
+                ll num = stod(s.substr(j, i - j));
+                operands.push(num);
+            }
+            else if (s[i] == '(')
+            {
+                operators.push("(");
+                i++;
+            }
+            else if (s[i] == ')' || s[i] == ',')
+            {
+                while (!operators.empty() && operators.top() != "(")
+                {
+                    std::string op = operators.top();
+                    operators.pop();
+                    uc f = getFunction(op);
+                    if (f > 3 && f != 18)
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ll num = operands.top();
+                        operands.pop();
+                        operands.push(performOperation(num, f));
+                    }
+                    else
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ll n2 = operands.top();
+                        operands.pop();
+                        if (operands.empty())
+                            throw "bad input!";
+                        ll n1 = operands.top();
+                        operands.pop();
+                        if (f != 18)
+                            operands.push(performOperation(n2, n1, op));
+                        else
+                            operands.push(performOperation(n1, f, n2));
+                    }
+                }
+                if (s[i] == ')')
+                    operators.pop();
+                i++;
+            }
+            else if ((s[i] == '+' || s[i] == '-') && (i == 0 || s[i - 1] == '^' || ((s[i - 1] < '0' || s[i - 1] > '9') && s[i - 1] != ')')))
+            {
+                if (i + 1 == N || s[i + 1] == '+' || s[i + 1] == '-' || s[i + 1] == '*' || s[i + 1] == '/' || s[i + 1] == '%' || s[i + 1] == '^')
+                    throw "bad input!";
+                if (s[i + 1] >= '0' && s[i + 1] <= '9')
+                {
+                    ui j = ++i;
+                    while (i < N && (s[i] >= '0' && s[i] <= '9'))
+                        i++;
+                    ll num = stod(s.substr(j, i - j));
+                    operands.push(s[j - 1] == '-' ? -num : num);
+                }
+                else
+                {
+                    operators.push(s[i] == '-' ? "-" : "+");
+                    operands.push(0);
+                    i++;
+                }
+            }
+            else if (i > 0 && (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/' || s[i] == '%' || s[i] == '^') && ((s[i - 1] >= '0' && s[i - 1] <= '9') || s[i - 1] == ')'))
+            {
+                const std::string currOp(1, s[i]);
+                uc f, curr = getFunction(currOp);
+                while (!operators.empty() && ((f = getFunction(operators.top())) > curr || (f == curr && curr < 3)))
+                {
+                    std::string op = operators.top();
+                    operators.pop();
+                    if (f > 3 && f != 18)
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ll num = operands.top();
+                        operands.pop();
+                        operands.push(performOperation(num, f));
+                    }
+                    else
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ll n2 = operands.top();
+                        operands.pop();
+                        if (operands.empty())
+                            throw "bad input!";
+                        ll n1 = operands.top();
+                        operands.pop();
+                        if (f != 18)
+                            operands.push(performOperation(n2, n1, op));
+                        else
+                            operands.push(performOperation(n1, f, n2));
+                    }
+                }
+                operators.push(currOp);
+                i++;
+            }
+            else
+                throw "bad input!";
+        }
+        while (!operators.empty())
+        {
+            std::string op = operators.top();
+            if (op == "(")
+                throw "bad input!";
+            operators.pop();
+            uc f = getFunction(op);
+            if (f > 3 && f != 18)
+            {
+                if (operands.empty())
+                    throw "bad input!";
+                ll num = operands.top();
+                operands.pop();
+                operands.push(performOperation(num, f));
+            }
+            else
+            {
+                if (operands.empty())
+                    throw "bad input!";
+                ll n2 = operands.top();
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                ll n1 = operands.top();
+                operands.pop();
+                if (f != 18)
+                    operands.push(performOperation(n2, n1, op));
+                else
+                    operands.push(performOperation(n1, f, n2));
+            }
+        }
+        if (operands.empty() || !operators.empty() || operands.size() > 1)
+            throw "bad input!";
+        return operands.top();
+    }
+    catch (std::string e)
+    {
+        cout << e << endl;
+        return 0.0;
+    }
+    catch (...)
+    {
+        cout << "bad input!" << endl;
+        return 0.0;
+    }
+}
+
+ll evaluateExpressionI(std::string &&s) noexcept
 {
     try
     {

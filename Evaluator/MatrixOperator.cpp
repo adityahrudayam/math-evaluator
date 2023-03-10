@@ -12,7 +12,89 @@ using std::ifstream;
 using std::ofstream;
 using std::stack;
 
-string findOrderOfMinOps(uc dim[], ui N)
+template <Matrix T>
+T performOperation(T &n1, T &n2, char &op)
+{
+    switch (op)
+    {
+    case '+':
+        return n1.Add(n2);
+    case '-':
+        return n1.Subtract(n2);
+    case '*':
+        return n1.Multiply(n2);
+    default:
+        throw "bad input!";
+    }
+}
+
+template <Matrix T>
+T matrixExpEval(string &s, vector<T> &vec)
+{
+    const ui N = static_cast<ui>(s.length());
+    stack<char> operators;
+    stack<T> operands;
+    int i = 0;
+    while (i < N)
+    {
+        if (s[i] == '(')
+        {
+            operators.push('(');
+            i++;
+        }
+        else if (s[i] == ')')
+        {
+            while (!operators.empty() && operators.top() != '(')
+            {
+                char op = operators.top();
+                operators.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                T n2{std::move(operands.top())};
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                T n1{std::move(operands.top())};
+                operands.pop();
+                operands.push(std::move(performOperation(n1, n2, op)));
+            }
+            operators.pop();
+            i++;
+        }
+        else if (s[i] >= '0' && s[i] <= '9')
+        {
+            string substr;
+            while (i < N && s[i] >= '0' && s[i] <= '9')
+                substr.push_back(s[i++]);
+            operands.push(vec[stoi(substr)]);
+        }
+        else if (s[i] == '+' || s[i] == '-' || s[i] == '*')
+        {
+            while (!operators.empty() && (operators.top() == '*' || s[i] != '*'))
+            {
+                char op = operators.top();
+                operators.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                T n2{std::move(operands.top())};
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                T n1{std::move(operands.top())};
+                operands.pop();
+                operands.push(std::move(performOperation(n1, n2, op)));
+            }
+            operators.push(s[i++]);
+        }
+        else
+            throw "bad input!";
+    }
+    if (!operators.empty() || operands.empty() || operands.size() > 1)
+        throw "bad input!";
+    return operands.top();
+}
+
+string findOrderOfMinOps(uc dim[], const ui &N)
 {
     string sdp[N * N];
     ll dp[N * N];
@@ -70,88 +152,6 @@ T multiplyAndGetResult(vector<T> &vec)
     return matrixExpEval(order, vec);
 }
 
-template <Matrix T>
-T matrixExpEval(string &s, vector<T> &vec)
-{
-    const ui N = static_cast<ui>(s.length());
-    stack<char> operators;
-    stack<T> operands;
-    int i = 0;
-    while (i < N)
-    {
-        if (s[i] == '(')
-        {
-            operators.push('(');
-            i++;
-        }
-        else if (s[i] == ')')
-        {
-            while (!operators.empty() && operators.top() != '(')
-            {
-                char op = operators.top();
-                operators.pop();
-                if (operands.empty())
-                    throw "bad input!";
-                T n2 = operands.top();
-                operands.pop();
-                if (operands.empty())
-                    throw "bad input!";
-                T n1 = operands.top();
-                operands.pop();
-                operands.push(performOperation(n1, n2, op));
-            }
-            operators.pop();
-            i++;
-        }
-        else if (s[i] >= '0' && s[i] <= '9')
-        {
-            string substr;
-            while (i < N && s[i] >= '0' && s[i] <= '9')
-                substr.push_back(s[i++]);
-            operands.push(vec[stoi(substr)]);
-        }
-        else if (s[i] == '+' || s[i] == '-' || s[i] == '*')
-        {
-            while (!operators.empty() && (operators.top() == '*' || s[i] != '*'))
-            {
-                char op = operators.top();
-                operators.pop();
-                if (operands.empty())
-                    throw "bad input!";
-                T n2 = operands.top();
-                operands.pop();
-                if (operands.empty())
-                    throw "bad input!";
-                T n1 = operands.top();
-                operands.pop();
-                operands.push(performOperation(n1, n2, op));
-            }
-            operators.push(s[i++]);
-        }
-        else
-            throw "bad input!";
-    }
-    if (!operators.empty() || operands.empty() || operands.size() > 1)
-        throw "bad input!";
-    return operands.top();
-}
-
-template <Matrix T>
-T performOperation(const T &n1, const T &n2, char &op)
-{
-    switch (op)
-    {
-    case '+':
-        return n1.Add(n2);
-    case '-':
-        return n1.Subtract(n2);
-    case '*':
-        return n1.Multiply(n2);
-    default:
-        throw "bad input!";
-    }
-}
-
 void takeInputAndEvalLD()
 {
     try
@@ -170,7 +170,7 @@ void takeInputAndEvalLD()
                     cin >> s[j + i * N];
             vec.emplace_back(M, N, s);
         }
-        cout << multiplyAndGetResult(vec) << endl;
+        cout << multiplyAndGetResult<MatrixLD>(vec) << endl;
     }
     catch (string e)
     {
@@ -200,7 +200,7 @@ void takeInputAndEvalLL()
                     cin >> s[j + i * N];
             vec.emplace_back(M, N, s);
         }
-        cout << multiplyAndGetResult(vec) << endl;
+        cout << multiplyAndGetResult<MatrixLL>(vec) << endl;
     }
     catch (string e)
     {
@@ -231,12 +231,12 @@ void takeInputAndEvalBI()
                 {
                     string num;
                     cin >> num;
-                    new (&(s[j + i * N])) BigInteger(num);
+                    s[j + i * N] = BigInteger(num);
                 }
             }
             vec.emplace_back(M, N, s);
         }
-        cout << multiplyAndGetResult(vec) << endl;
+        cout << multiplyAndGetResult<MatrixBigInteger>(vec) << endl;
     }
     catch (string e)
     {

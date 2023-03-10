@@ -1,16 +1,16 @@
 #pragma once
 
-#include <string>
+// #include <string>
 #include "BigInteger.hpp"
 
-using std::istream;
-using std::ostream;
-using std::string;
+// using std::istream;
+// using std::ostream;
+// using std::string;
 
-typedef unsigned char uc;
-typedef unsigned int ui;
-typedef long long ll;
-typedef long double ld;
+// typedef unsigned char uc;
+// typedef unsigned int ui;
+// typedef long long ll;
+// typedef long double ld;
 
 class MatrixLD
 {
@@ -24,9 +24,11 @@ public:
 
     explicit MatrixLD(const uc, const uc, ld *);
 
-    explicit MatrixLD(const uc, const uc, string *);
+    explicit MatrixLD(const uc, const uc, const string *);
 
     MatrixLD(const MatrixLD &);
+
+    MatrixLD(MatrixLD &&) noexcept;
 
     ~MatrixLD();
 
@@ -37,32 +39,33 @@ public:
     MatrixLD Multiply(const MatrixLD &) const;
 
     // Getters & Setters
-    uc GetM() const;
+    const uc GetM() const;
 
-    uc GetN() const;
+    const uc GetN() const;
 
     const ld *GetArray() const;
 
     const ld operator[](const unsigned short &) const;
 
-    MatrixLD operator+(MatrixLD &);
-    MatrixLD operator+(const ld &);
-    MatrixLD operator-(MatrixLD &);
-    MatrixLD operator-(const ld &);
-    MatrixLD operator*(MatrixLD &);
-    MatrixLD operator*(const ld &);
+    friend MatrixLD operator+(const MatrixLD &, const MatrixLD &);
+    friend MatrixLD operator+(const MatrixLD &, const ld &);
+    friend MatrixLD operator-(const MatrixLD &, const MatrixLD &);
+    friend MatrixLD operator-(const MatrixLD &, const ld &);
+    friend MatrixLD operator*(const MatrixLD &, const MatrixLD &);
+    friend MatrixLD operator*(const MatrixLD &, const ld &);
     // MatrixLD operator^(MatrixLD &);
 
-    bool operator==(MatrixLD &);
-    bool operator!=(MatrixLD &);
+    friend bool operator==(const MatrixLD &, const MatrixLD &);
+    friend bool operator!=(const MatrixLD &, const MatrixLD &);
 
     MatrixLD &operator=(const MatrixLD &);
-    MatrixLD &operator+=(MatrixLD &);
-    MatrixLD &operator+=(const ld &);
-    MatrixLD &operator-=(MatrixLD &);
-    MatrixLD &operator-=(const ld &);
-    MatrixLD &operator*=(MatrixLD &);
-    MatrixLD &operator*=(const ld &);
+    MatrixLD &operator=(MatrixLD &&) noexcept;
+    friend MatrixLD &operator+=(MatrixLD &, const MatrixLD &);
+    friend MatrixLD &operator+=(MatrixLD &, const ld &);
+    friend MatrixLD &operator-=(MatrixLD &, const MatrixLD &);
+    friend MatrixLD &operator-=(MatrixLD &, const ld &);
+    friend MatrixLD &operator*=(MatrixLD &, const MatrixLD &);
+    friend MatrixLD &operator*=(MatrixLD &, const ld &);
     // MatrixLD &operator^=(MatrixLD &);
 
     // OutStream
@@ -85,6 +88,8 @@ public:
 
     MatrixLL(const MatrixLL &);
 
+    MatrixLL(MatrixLL &&) noexcept;
+
     ~MatrixLL();
 
     MatrixLL Add(const MatrixLL &) const;
@@ -94,32 +99,33 @@ public:
     MatrixLL Multiply(const MatrixLL &) const;
 
     // Getters & Setters
-    uc GetM() const;
+    const uc GetM() const;
 
-    uc GetN() const;
+    const uc GetN() const;
 
     const ll *GetArray() const;
 
     const ll operator[](const unsigned short &) const;
 
-    MatrixLL operator+(MatrixLL &);
-    MatrixLL operator+(const ll &);
-    MatrixLL operator-(MatrixLL &);
-    MatrixLL operator-(const ll &);
-    MatrixLL operator*(MatrixLL &);
-    MatrixLL operator*(const ll &);
+    friend MatrixLL operator+(const MatrixLL &, const MatrixLL &);
+    friend MatrixLL operator+(const MatrixLL &, const ll &);
+    friend MatrixLL operator-(const MatrixLL &, const MatrixLL &);
+    friend MatrixLL operator-(const MatrixLL &, const ll &);
+    friend MatrixLL operator*(const MatrixLL &, const MatrixLL &);
+    friend MatrixLL operator*(const MatrixLL &, const ll &);
     // MatrixLL operator^(MatrixLL &);
 
-    bool operator==(MatrixLL &);
-    bool operator!=(MatrixLL &);
+    friend bool operator==(const MatrixLL &, const MatrixLL &);
+    friend bool operator!=(const MatrixLL &, const MatrixLL &);
 
     MatrixLL &operator=(const MatrixLL &);
-    MatrixLL &operator+=(MatrixLL &);
-    MatrixLL &operator+=(const ll &);
-    MatrixLL &operator-=(MatrixLL &);
-    MatrixLL &operator-=(const ll &);
-    MatrixLL &operator*=(MatrixLL &);
-    MatrixLL &operator*=(const ll &);
+    MatrixLL &operator=(MatrixLL &&) noexcept;
+    friend MatrixLL &operator+=(MatrixLL &, const MatrixLL &);
+    friend MatrixLL &operator+=(MatrixLL &, const ll &);
+    friend MatrixLL &operator-=(MatrixLL &, const MatrixLL &);
+    friend MatrixLL &operator-=(MatrixLL &, const ll &);
+    friend MatrixLL &operator*=(MatrixLL &, const MatrixLL &);
+    friend MatrixLL &operator*=(MatrixLL &, const ll &);
     // MatrixLL &operator^=(MatrixLL &);
 
     // OutStream
@@ -138,9 +144,11 @@ public:
 
     explicit MatrixBigInteger(const uc, const uc, BigInteger *);
 
-    explicit MatrixBigInteger(const uc, const uc, string *);
+    explicit MatrixBigInteger(const uc, const uc, const string *);
 
     MatrixBigInteger(const MatrixBigInteger &);
+
+    MatrixBigInteger(MatrixBigInteger &&) noexcept;
 
     ~MatrixBigInteger();
 
@@ -151,32 +159,33 @@ public:
     MatrixBigInteger Multiply(const MatrixBigInteger &) const;
 
     // Getters & Setters
-    uc GetM() const;
+    const uc GetM() const;
 
-    uc GetN() const;
+    const uc GetN() const;
 
     const BigInteger *GetArray() const;
 
     const BigInteger operator[](const unsigned short &) const;
 
-    MatrixBigInteger operator+(MatrixBigInteger &);
-    MatrixBigInteger operator+(const BigInteger &);
-    MatrixBigInteger operator-(MatrixBigInteger &);
-    MatrixBigInteger operator-(const BigInteger &);
-    MatrixBigInteger operator*(MatrixBigInteger &);
-    MatrixBigInteger operator*(const BigInteger &);
+    friend MatrixBigInteger operator+(const MatrixBigInteger &, const MatrixBigInteger &);
+    friend MatrixBigInteger operator+(const MatrixBigInteger &, const BigInteger &);
+    friend MatrixBigInteger operator-(const MatrixBigInteger &, const MatrixBigInteger &);
+    friend MatrixBigInteger operator-(const MatrixBigInteger &, const BigInteger &);
+    friend MatrixBigInteger operator*(const MatrixBigInteger &, const MatrixBigInteger &);
+    friend MatrixBigInteger operator*(const MatrixBigInteger &, const BigInteger &);
     // MatrixBigInteger operator^(MatrixBigInteger &);
 
-    bool operator==(MatrixBigInteger &);
-    bool operator!=(MatrixBigInteger &);
+    friend bool operator==(const MatrixBigInteger &, const MatrixBigInteger &);
+    friend bool operator!=(const MatrixBigInteger &, const MatrixBigInteger &);
 
     MatrixBigInteger &operator=(const MatrixBigInteger &);
-    MatrixBigInteger &operator+=(MatrixBigInteger &);
-    MatrixBigInteger &operator+=(const BigInteger &);
-    MatrixBigInteger &operator-=(MatrixBigInteger &);
-    MatrixBigInteger &operator-=(const BigInteger &);
-    MatrixBigInteger &operator*=(MatrixBigInteger &);
-    MatrixBigInteger &operator*=(const BigInteger &);
+    MatrixBigInteger &operator=(MatrixBigInteger &&) noexcept;
+    friend MatrixBigInteger &operator+=(MatrixBigInteger &, const MatrixBigInteger &);
+    friend MatrixBigInteger &operator+=(MatrixBigInteger &, const BigInteger &);
+    friend MatrixBigInteger &operator-=(MatrixBigInteger &, const MatrixBigInteger &);
+    friend MatrixBigInteger &operator-=(MatrixBigInteger &, const BigInteger &);
+    friend MatrixBigInteger &operator*=(MatrixBigInteger &, const MatrixBigInteger &);
+    friend MatrixBigInteger &operator*=(MatrixBigInteger &, const BigInteger &);
     // MatrixBigInteger &operator^=(MatrixBigInteger &);
 
     // OutStream

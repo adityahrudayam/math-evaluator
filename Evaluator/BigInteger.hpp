@@ -17,49 +17,43 @@ private:
     uc Sign : 1;
     string Num;
 
-    inline BigInteger SubtractionHelper(BigInteger &, const ui &, const ui &);
-
-    inline BigInteger SubtractionHelper(const BigInteger &, const ui &, const ui &);
-
     string BuildNumStr(ll &);
 
+    inline BigInteger SubtractionHelper(const BigInteger &, const ui &, const ui &) const;
+
 public:
-    BigInteger();
+    explicit BigInteger();
 
     explicit BigInteger(ll);
 
     explicit BigInteger(const char *);
 
-    explicit BigInteger(string &);
+    explicit BigInteger(const string &);
 
-    explicit BigInteger(uc, string);
+    explicit BigInteger(const uc, const string &);
 
     BigInteger(const BigInteger &);
+
+    BigInteger(BigInteger &&) noexcept;
 
     bool IsNull() const;
 
     const ui Length() const;
 
-    BigInteger Add(const BigInteger &);
+    BigInteger Add(const BigInteger &) const;
 
-    BigInteger Add(BigInteger &);
+    BigInteger Subtract(const BigInteger &) const;
 
-    BigInteger Subtract(const BigInteger &);
+    BigInteger Multiply(const BigInteger &) const;
 
-    BigInteger Subtract(BigInteger &);
+    BigInteger Divide(const BigInteger &) const;
 
-    BigInteger Multiply(const BigInteger &);
-
-    BigInteger Multiply(BigInteger &);
-
-    BigInteger Divide(BigInteger &);
-
-    BigInteger Pow(BigInteger &);
+    BigInteger Pow(const BigInteger &) const;
 
     // Getters & Setters
     const uc GetSign() const;
 
-    void SetSign(const uc &);
+    void SetSign(const uc);
 
     const string GetNum() const;
 
@@ -67,46 +61,41 @@ public:
 
     inline const uc operator[](const ui &) const;
 
-    BigInteger operator+(const BigInteger &);
-    BigInteger operator+(BigInteger &);
-    BigInteger operator+(const ll &);
-    BigInteger operator-(const BigInteger &);
-    BigInteger operator-(BigInteger &);
-    BigInteger operator*(const BigInteger &);
-    BigInteger operator*(BigInteger &);
-    BigInteger operator*(const ll &);
-    BigInteger operator/(BigInteger &);
-    BigInteger operator^(BigInteger &);
+    friend BigInteger operator+(const BigInteger &, const BigInteger &);
+    friend BigInteger operator+(const BigInteger &, const ll &);
+    friend BigInteger operator-(const BigInteger &, const BigInteger &);
+    friend BigInteger operator*(const BigInteger &, const BigInteger &);
+    friend BigInteger operator*(const BigInteger &, const ll &);
+    friend BigInteger operator/(const BigInteger &, const BigInteger &);
+    friend BigInteger operator^(const BigInteger &, const BigInteger &);
 
     BigInteger operator++(int temp); // postfix increment
     BigInteger &operator++();        // prefix increment
     BigInteger operator--(int temp); // postfix decrement
     BigInteger &operator--();        // prefix decrement
 
-    bool operator==(BigInteger &);
-    bool operator==(const char *);
-    bool operator!=(BigInteger &);
-    bool operator<(const BigInteger &);
-    bool operator<(BigInteger &);
-    bool operator<(const string &);
-    bool operator>(BigInteger &);
-    bool operator>(const string &);
-    bool operator<=(BigInteger &);
-    bool operator>=(BigInteger &);
+    friend bool operator==(const BigInteger &, const BigInteger &);
+    friend bool operator==(const BigInteger &, const char *);
+    friend bool operator!=(const BigInteger &, const BigInteger &);
+    friend bool operator!=(const BigInteger &, const char *);
+    friend bool operator<(const BigInteger &, const BigInteger &);
+    friend bool operator<(const BigInteger &, const string &);
+    friend bool operator>(const BigInteger &, const BigInteger &);
+    friend bool operator>(const BigInteger &, const string &);
+    friend bool operator<=(const BigInteger &, const BigInteger &);
+    friend bool operator>=(const BigInteger &, const BigInteger &);
 
     BigInteger &operator=(const BigInteger &);
-    BigInteger &operator+=(const BigInteger &);
-    BigInteger &operator+=(BigInteger &);
-    BigInteger &operator+=(const ll &);
-    BigInteger &operator-=(const BigInteger &);
-    BigInteger &operator-=(BigInteger &);
-    BigInteger &operator-=(const ll &);
-    BigInteger &operator*=(const BigInteger &);
-    BigInteger &operator*=(BigInteger &);
-    BigInteger &operator*=(const ll &);
-    BigInteger &operator/=(BigInteger &);
-    BigInteger &operator/=(const ll &);
-    BigInteger &operator^=(BigInteger &);
+    BigInteger &operator=(BigInteger &&) noexcept;
+    friend BigInteger &operator+=(BigInteger &, const BigInteger &);
+    friend BigInteger &operator+=(BigInteger &, const ll &);
+    friend BigInteger &operator-=(BigInteger &, const BigInteger &);
+    friend BigInteger &operator-=(BigInteger &, const ll &);
+    friend BigInteger &operator*=(BigInteger &, const BigInteger &);
+    friend BigInteger &operator*=(BigInteger &, const ll &);
+    friend BigInteger &operator/=(BigInteger &, const BigInteger &);
+    friend BigInteger &operator/=(BigInteger &, const ll &);
+    friend BigInteger &operator^=(BigInteger &, const BigInteger &);
 
     // OutStream & InStream
     friend ostream &operator<<(ostream &, const BigInteger &);

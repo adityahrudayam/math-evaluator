@@ -18,10 +18,14 @@ inline static ld performOperation(const ld &, const ld &, const string &);
 
 /**
  * Parameters:
- * s – The string expression to evaluate.
+ * string s – The string expression to evaluate.
  * Returns:
  * The function evaluates an expression & returns a double.
  */
-ld evaluateExpressionD(string) noexcept;
+ld evaluateExpressionD(string &) noexcept;
 
-ld evaluateExpressionDWithoutPreprocessing(string s) noexcept;
+ld evaluateExpressionD(string &&) noexcept;
+
+ld evaluateExpressionDWithoutPreprocessing(const string &) noexcept;
+
+ld evaluateExpressionDWithoutPreprocessing(string &&) noexcept;

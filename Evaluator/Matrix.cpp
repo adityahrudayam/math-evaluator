@@ -1,7 +1,14 @@
 #include <iostream>
 #include "Matrix.hpp"
 
+using std::cout;
 using std::endl;
+
+ld evaluateExpressionDWithoutPreprocessing(const string &) noexcept;
+
+ll evaluateExpressionI(string &) noexcept;
+
+BigInteger evaluateExpression(const string &) noexcept;
 
 #define EvaluateLD evaluateExpressionDWithoutPreprocessing
 
@@ -9,19 +16,15 @@ using std::endl;
 
 #define EvaluateBI evaluateExpression
 
-ld evaluateExpressionDWithoutPreprocessing(string) noexcept;
-
-ll evaluateExpressionI(string) noexcept;
-
-BigInteger evaluateExpression(string) noexcept;
-
 MatrixLD::MatrixLD() : M(0), N(0), Array(nullptr)
 {
 }
 
-MatrixLD::MatrixLD(const uc M, const uc N, ld *Array) : M(M), N(N), Array(Array) {}
+MatrixLD::MatrixLD(const uc M, const uc N, ld *Array) : M(M), N(N), Array(Array)
+{
+}
 
-MatrixLD::MatrixLD(const uc M, const uc N, string *s) : M(M), N(N)
+MatrixLD::MatrixLD(const uc M, const uc N, const string *s) : M(M), N(N)
 {
     Array = new ld[M * N];
     for (uc i = 0; i < M; i++)
@@ -29,13 +32,19 @@ MatrixLD::MatrixLD(const uc M, const uc N, string *s) : M(M), N(N)
             Array[j + i * N] = EvaluateLD(s[j + i * N]);
 }
 
-MatrixLD::MatrixLD(const MatrixLD &o) : M(o.M), N(o.N)
+MatrixLD::MatrixLD(const MatrixLD &o) : M{o.M}, N{o.N}
 {
-    const ld *copyArr = o.Array;
     Array = new ld[M * N];
+    const ld *copyArr = o.Array;
     for (uc i = 0; i < M; i++)
         for (uc j = 0; j < N; j++)
             Array[j + i * N] = copyArr[j + i * N];
+}
+
+MatrixLD::MatrixLD(MatrixLD &&o) noexcept : M{o.M}, N{o.N}, Array{o.Array}
+{
+    o.M = o.N = 0;
+    o.Array = nullptr;
 }
 
 MatrixLD::~MatrixLD()
@@ -51,7 +60,7 @@ MatrixLD MatrixLD::Add(const MatrixLD &o) const
 {
     if (o.M != M || o.N != N)
         throw "Cannot add matrices of given dimensions!";
-    const ld *otherArr = o.Array;
+    ld *otherArr = o.Array;
     ld *res = new ld[M * N];
     for (uc i = 0; i < M; i++)
         for (uc j = 0; j < N; j++)
@@ -63,7 +72,7 @@ MatrixLD MatrixLD::Subtract(const MatrixLD &o) const
 {
     if (o.M != M || o.N != N)
         throw "Cannot subtract matrices of given dimensions!";
-    const ld *otherArr = o.Array;
+    ld *otherArr = o.Array;
     ld *res = new ld[M * N];
     for (uc i = 0; i < M; i++)
         for (uc j = 0; j < N; j++)
@@ -76,7 +85,7 @@ MatrixLD MatrixLD::Multiply(const MatrixLD &o) const
     if (o.M != N)
         throw "Cannot multiply matrices of given dimensions!";
     const uc resM = M, resN = o.N;
-    const ld *otherArr = o.Array;
+    ld *otherArr = o.Array;
     ld *res = new ld[resM * resN];
     for (uc i = 0; i < resM; i++)
     {
@@ -91,12 +100,12 @@ MatrixLD MatrixLD::Multiply(const MatrixLD &o) const
     return MatrixLD(resM, resN, res);
 }
 
-uc MatrixLD::GetM() const
+const uc MatrixLD::GetM() const
 {
     return M;
 }
 
-uc MatrixLD::GetN() const
+const uc MatrixLD::GetN() const
 {
     return N;
 }
@@ -113,66 +122,66 @@ const ld MatrixLD::operator[](const unsigned short &idx) const
     return Array[idx];
 }
 
-MatrixLD MatrixLD::operator+(MatrixLD &o)
+MatrixLD operator+(const MatrixLD &c, const MatrixLD &o)
 {
-    return Add(o);
+    return c.Add(o);
 }
 
-MatrixLD MatrixLD::operator+(const ld &o)
+MatrixLD operator+(const MatrixLD &c, const ld &o)
 {
-    ld *res = new ld[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] + o;
-    return MatrixLD(M, N, res);
+    ld *res = new ld[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] + o;
+    return MatrixLD(c.M, c.N, res);
 }
 
-MatrixLD MatrixLD::operator-(MatrixLD &o)
+MatrixLD operator-(const MatrixLD &c, const MatrixLD &o)
 {
-    return Subtract(o);
+    return c.Subtract(o);
 }
 
-MatrixLD MatrixLD::operator-(const ld &o)
+MatrixLD operator-(const MatrixLD &c, const ld &o)
 {
-    ld *res = new ld[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] - o;
-    return MatrixLD(M, N, res);
+    ld *res = new ld[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] - o;
+    return MatrixLD(c.M, c.N, res);
 }
 
-MatrixLD MatrixLD::operator*(MatrixLD &o)
+MatrixLD operator*(const MatrixLD &c, const MatrixLD &o)
 {
-    return Multiply(o);
+    return c.Multiply(o);
 }
 
-MatrixLD MatrixLD::operator*(const ld &o)
+MatrixLD operator*(const MatrixLD &c, const ld &o)
 {
-    ld *res = new ld[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] * o;
-    return MatrixLD(M, N, res);
+    ld *res = new ld[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] * o;
+    return MatrixLD(c.M, c.N, res);
 }
 
-bool MatrixLD::operator==(MatrixLD &o)
+bool operator==(const MatrixLD &c, const MatrixLD &o)
 {
-    if (M != o.M || N != o.N)
+    if (c.M != o.M || c.N != o.N)
         return false;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            if (Array[j + i * N] != o.Array[j + i * N])
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            if (c.Array[j + i * c.N] != o.Array[j + i * c.N])
                 return false;
     return true;
 }
 
-bool MatrixLD::operator!=(MatrixLD &o)
+bool operator!=(const MatrixLD &c, const MatrixLD &o)
 {
-    if (M != o.M || N != o.N)
+    if (c.M != o.M || c.N != o.N)
         return true;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            if (Array[j + i * N] != o.Array[j + i * N])
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            if (c.Array[j + i * c.N] != o.Array[j + i * c.N])
                 return true;
     return false;
 }
@@ -191,66 +200,97 @@ MatrixLD &MatrixLD::operator=(const MatrixLD &o)
     return *this;
 }
 
-MatrixLD &MatrixLD::operator+=(MatrixLD &o)
+MatrixLD &MatrixLD::operator=(MatrixLD &&o) noexcept
 {
-    if (o.M != M || o.N != N)
-        return *this;
+    if (this != &o)
+    {
+        delete[] Array;
+        M = o.M;
+        N = o.N;
+        Array = o.Array;
+        o.M = o.N = 0;
+        o.Array = nullptr;
+    }
+    return *this;
+}
+
+MatrixLD &operator+=(MatrixLD &c, const MatrixLD &o)
+{
+    if (o.M != c.M || o.N != c.N)
+        return c;
     const ld *otherArr = o.Array;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] += otherArr[j + i * N];
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] += otherArr[j + i * c.N];
+    return c;
 }
 
-MatrixLD &MatrixLD::operator+=(const ld &o)
+MatrixLD &operator+=(MatrixLD &c, const ld &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] += o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] += o;
+    return c;
 }
 
-MatrixLD &MatrixLD::operator-=(MatrixLD &o)
+MatrixLD &operator-=(MatrixLD &c, const MatrixLD &o)
 {
-    if (o.M != M || o.N != N)
-        return *this;
+    if (o.M != c.M || o.N != c.N)
+        return c;
     const ld *otherArr = o.Array;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] -= otherArr[j + i * N];
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] -= otherArr[j + i * c.N];
+    return c;
 }
 
-MatrixLD &MatrixLD::operator-=(const ld &o)
+MatrixLD &operator-=(MatrixLD &c, const ld &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] -= o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] -= o;
+    return c;
 }
 
-MatrixLD &MatrixLD::operator*=(MatrixLD &o)
+MatrixLD &operator*=(MatrixLD &c, const MatrixLD &o)
 {
-    if (N != o.M)
-        return *this;
-    return *this = Multiply(o);
+    if (c.N != o.M)
+        return c;
+    const uc resM = c.M, resN = o.N;
+    ld *otherArr = o.Array;
+    ld *res = new ld[resM * resN];
+    for (uc i = 0; i < resM; i++)
+    {
+        for (uc j = 0; j < resN; j++)
+        {
+            ld sum = 0;
+            for (uc k = 0; k < c.N; k++)
+                sum += c.Array[k + i * c.N] * otherArr[j + k * resN];
+            res[j + i * resN] = sum;
+        }
+    }
+    c.M = resM;
+    c.N = resN;
+    delete[] c.Array;
+    c.Array = res;
+    return c;
 }
 
-MatrixLD &MatrixLD::operator*=(const ld &o)
+MatrixLD &operator*=(MatrixLD &c, const ld &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] *= o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] *= o;
+    return c;
 }
 
-ostream &operator<<(ostream &out, const MatrixLD &curr)
+ostream &operator<<(ostream &out, const MatrixLD &c)
 {
-    const uc M = curr.M, N = curr.N;
+    const uc M = c.M, N = c.N;
     for (uc i = 0; i < M; i++)
     {
         for (uc j = 0; j < N; j++)
-            out << curr[j + i * N] << " ";
+            out << c[j + i * N] << " ";
         out << endl;
     }
     return out;
@@ -260,7 +300,9 @@ MatrixLL::MatrixLL() : M(0), N(0), Array(nullptr)
 {
 }
 
-MatrixLL::MatrixLL(const uc M, const uc N, ll *Array) : M(M), N(N), Array(Array) {}
+MatrixLL::MatrixLL(const uc M, const uc N, ll *Array) : M(M), N(N), Array(Array)
+{
+}
 
 MatrixLL::MatrixLL(const uc M, const uc N, string *s) : M(M), N(N)
 {
@@ -270,13 +312,19 @@ MatrixLL::MatrixLL(const uc M, const uc N, string *s) : M(M), N(N)
             Array[j + i * N] = EvaluateLL(s[j + i * N]);
 }
 
-MatrixLL::MatrixLL(const MatrixLL &o) : M(o.M), N(o.N)
+MatrixLL::MatrixLL(const MatrixLL &o) : M{o.M}, N{o.N}
 {
-    const ll *copyArr = o.Array;
     Array = new ll[M * N];
+    const ll *copyArr = o.Array;
     for (uc i = 0; i < M; i++)
         for (uc j = 0; j < N; j++)
             Array[j + i * N] = copyArr[j + i * N];
+}
+
+MatrixLL::MatrixLL(MatrixLL &&o) noexcept : M{o.M}, N{o.N}, Array{o.Array}
+{
+    o.M = o.N = 0;
+    o.Array = nullptr;
 }
 
 MatrixLL::~MatrixLL()
@@ -292,7 +340,7 @@ MatrixLL MatrixLL::Add(const MatrixLL &o) const
 {
     if (o.M != M || o.N != N)
         throw "Cannot add matrices of given dimensions!";
-    const ll *otherArr = o.Array;
+    ll *otherArr = o.Array;
     ll *res = new ll[M * N];
     for (uc i = 0; i < M; i++)
         for (uc j = 0; j < N; j++)
@@ -304,7 +352,7 @@ MatrixLL MatrixLL::Subtract(const MatrixLL &o) const
 {
     if (o.M != M || o.N != N)
         throw "Cannot subtract matrices of given dimensions!";
-    const ll *otherArr = o.Array;
+    ll *otherArr = o.Array;
     ll *res = new ll[M * N];
     for (uc i = 0; i < M; i++)
         for (uc j = 0; j < N; j++)
@@ -317,7 +365,7 @@ MatrixLL MatrixLL::Multiply(const MatrixLL &o) const
     if (o.M != N)
         throw "Cannot multiply matrices of given dimensions!";
     const uc resM = M, resN = o.N;
-    const ll *otherArr = o.Array;
+    ll *otherArr = o.Array;
     ll *res = new ll[resM * resN];
     for (uc i = 0; i < resM; i++)
     {
@@ -332,12 +380,12 @@ MatrixLL MatrixLL::Multiply(const MatrixLL &o) const
     return MatrixLL(resM, resN, res);
 }
 
-uc MatrixLL::GetM() const
+const uc MatrixLL::GetM() const
 {
     return M;
 }
 
-uc MatrixLL::GetN() const
+const uc MatrixLL::GetN() const
 {
     return N;
 }
@@ -354,66 +402,66 @@ const ll MatrixLL::operator[](const unsigned short &idx) const
     return Array[idx];
 }
 
-MatrixLL MatrixLL::operator+(MatrixLL &o)
+MatrixLL operator+(const MatrixLL &c, const MatrixLL &o)
 {
-    return Add(o);
+    return c.Add(o);
 }
 
-MatrixLL MatrixLL::operator+(const ll &o)
+MatrixLL operator+(const MatrixLL &c, const ll &o)
 {
-    ll *res = new ll[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] + o;
-    return MatrixLL(M, N, res);
+    ll *res = new ll[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] + o;
+    return MatrixLL(c.M, c.N, res);
 }
 
-MatrixLL MatrixLL::operator-(MatrixLL &o)
+MatrixLL operator-(const MatrixLL &c, const MatrixLL &o)
 {
-    return Subtract(o);
+    return c.Subtract(o);
 }
 
-MatrixLL MatrixLL::operator-(const ll &o)
+MatrixLL operator-(const MatrixLL &c, const ll &o)
 {
-    ll *res = new ll[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] - o;
-    return MatrixLL(M, N, res);
+    ll *res = new ll[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] - o;
+    return MatrixLL(c.M, c.N, res);
 }
 
-MatrixLL MatrixLL::operator*(MatrixLL &o)
+MatrixLL operator*(const MatrixLL &c, const MatrixLL &o)
 {
-    return Multiply(o);
+    return c.Multiply(o);
 }
 
-MatrixLL MatrixLL::operator*(const ll &o)
+MatrixLL operator*(const MatrixLL &c, const ll &o)
 {
-    ll *res = new ll[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] * o;
-    return MatrixLL(M, N, res);
+    ll *res = new ll[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] * o;
+    return MatrixLL(c.M, c.N, res);
 }
 
-bool MatrixLL::operator==(MatrixLL &o)
+bool operator==(const MatrixLL &c, const MatrixLL &o)
 {
-    if (M != o.M || N != o.N)
+    if (c.M != o.M || c.N != o.N)
         return false;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            if (Array[j + i * N] != o.Array[j + i * N])
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            if (c.Array[j + i * c.N] != o.Array[j + i * c.N])
                 return false;
     return true;
 }
 
-bool MatrixLL::operator!=(MatrixLL &o)
+bool operator!=(const MatrixLL &c, const MatrixLL &o)
 {
-    if (M != o.M || N != o.N)
+    if (c.M != o.M || c.N != o.N)
         return true;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            if (Array[j + i * N] != o.Array[j + i * N])
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            if (c.Array[j + i * c.N] != o.Array[j + i * c.N])
                 return true;
     return false;
 }
@@ -432,66 +480,97 @@ MatrixLL &MatrixLL::operator=(const MatrixLL &o)
     return *this;
 }
 
-MatrixLL &MatrixLL::operator+=(MatrixLL &o)
+MatrixLL &MatrixLL::operator=(MatrixLL &&o) noexcept
 {
-    if (o.M != M || o.N != N)
-        return *this;
+    if (this != &o)
+    {
+        delete[] Array;
+        M = o.M;
+        N = o.N;
+        Array = o.Array;
+        o.M = o.N = 0;
+        o.Array = nullptr;
+    }
+    return *this;
+}
+
+MatrixLL &operator+=(MatrixLL &c, const MatrixLL &o)
+{
+    if (o.M != c.M || o.N != c.N)
+        return c;
     const ll *otherArr = o.Array;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] += otherArr[j + i * N];
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] += otherArr[j + i * c.N];
+    return c;
 }
 
-MatrixLL &MatrixLL::operator+=(const ll &o)
+MatrixLL &operator+=(MatrixLL &c, const ll &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] += o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] += o;
+    return c;
 }
 
-MatrixLL &MatrixLL::operator-=(MatrixLL &o)
+MatrixLL &operator-=(MatrixLL &c, const MatrixLL &o)
 {
-    if (o.M != M || o.N != N)
-        return *this;
+    if (o.M != c.M || o.N != c.N)
+        return c;
     const ll *otherArr = o.Array;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] -= otherArr[j + i * N];
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] -= otherArr[j + i * c.N];
+    return c;
 }
 
-MatrixLL &MatrixLL::operator-=(const ll &o)
+MatrixLL &operator-=(MatrixLL &c, const ll &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] -= o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] -= o;
+    return c;
 }
 
-MatrixLL &MatrixLL::operator*=(MatrixLL &o)
+MatrixLL &operator*=(MatrixLL &c, const MatrixLL &o)
 {
-    if (N != o.M)
-        return *this;
-    return *this = Multiply(o);
+    if (c.N != o.M)
+        return c;
+    const uc resM = c.M, resN = o.N;
+    ll *otherArr = o.Array;
+    ll *res = new ll[resM * resN];
+    for (uc i = 0; i < resM; i++)
+    {
+        for (uc j = 0; j < resN; j++)
+        {
+            ll sum = 0;
+            for (uc k = 0; k < c.N; k++)
+                sum += c.Array[k + i * c.N] * otherArr[j + k * resN];
+            res[j + i * resN] = sum;
+        }
+    }
+    c.M = resM;
+    c.N = resN;
+    delete[] c.Array;
+    c.Array = res;
+    return c;
 }
 
-MatrixLL &MatrixLL::operator*=(const ll &o)
+MatrixLL &operator*=(MatrixLL &c, const ll &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] *= o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] *= o;
+    return c;
 }
 
-ostream &operator<<(ostream &out, const MatrixLL &curr)
+ostream &operator<<(ostream &out, const MatrixLL &c)
 {
-    const uc M = curr.M, N = curr.N;
+    const uc M = c.M, N = c.N;
     for (uc i = 0; i < M; i++)
     {
         for (uc j = 0; j < N; j++)
-            out << curr[j + i * N] << " ";
+            out << c[j + i * N] << " ";
         out << endl;
     }
     return out;
@@ -501,9 +580,11 @@ MatrixBigInteger::MatrixBigInteger() : M(0), N(0), Array(nullptr)
 {
 }
 
-MatrixBigInteger::MatrixBigInteger(const uc M, const uc N, BigInteger *Array) : M(M), N(N), Array(Array) {}
+MatrixBigInteger::MatrixBigInteger(const uc M, const uc N, BigInteger *Array) : M(M), N(N), Array(Array)
+{
+}
 
-MatrixBigInteger::MatrixBigInteger(const uc M, const uc N, string *s) : M(M), N(N)
+MatrixBigInteger::MatrixBigInteger(const uc M, const uc N, const string *s) : M(M), N(N)
 {
     Array = new BigInteger[M * N];
     for (uc i = 0; i < M; i++)
@@ -511,22 +592,25 @@ MatrixBigInteger::MatrixBigInteger(const uc M, const uc N, string *s) : M(M), N(
             Array[j + i * N] = EvaluateBI(s[j + i * N]);
 }
 
-MatrixBigInteger::MatrixBigInteger(const MatrixBigInteger &o) : M(o.M), N(o.N)
+MatrixBigInteger::MatrixBigInteger(const MatrixBigInteger &o) : M{o.M}, N{o.N}
 {
-    const BigInteger *copyArr = o.Array;
     Array = new BigInteger[M * N];
+    const BigInteger *copyArr = o.Array;
     for (uc i = 0; i < M; i++)
         for (uc j = 0; j < N; j++)
             Array[j + i * N] = copyArr[j + i * N];
+}
+
+MatrixBigInteger::MatrixBigInteger(MatrixBigInteger &&o) noexcept : M{o.M}, N{o.N}, Array{o.Array}
+{
+    o.M = o.N = 0;
+    o.Array = nullptr;
 }
 
 MatrixBigInteger::~MatrixBigInteger()
 {
     if (Array != nullptr)
     {
-        // for (int i = 0; i < M; i++)
-        //     for (int j = 0; j < N; j++)
-        //         delete (Array + i * N + j);
         delete[] Array;
         Array = nullptr;
     }
@@ -576,12 +660,12 @@ MatrixBigInteger MatrixBigInteger::Multiply(const MatrixBigInteger &o) const
     return MatrixBigInteger(resM, resN, res);
 }
 
-uc MatrixBigInteger::GetM() const
+const uc MatrixBigInteger::GetM() const
 {
     return M;
 }
 
-uc MatrixBigInteger::GetN() const
+const uc MatrixBigInteger::GetN() const
 {
     return N;
 }
@@ -598,66 +682,66 @@ const BigInteger MatrixBigInteger::operator[](const unsigned short &idx) const
     return Array[idx];
 }
 
-MatrixBigInteger MatrixBigInteger::operator+(MatrixBigInteger &o)
+MatrixBigInteger operator+(const MatrixBigInteger &c, const MatrixBigInteger &o)
 {
-    return Add(o);
+    return c.Add(o);
 }
 
-MatrixBigInteger MatrixBigInteger::operator+(const BigInteger &o)
+MatrixBigInteger operator+(const MatrixBigInteger &c, const BigInteger &o)
 {
-    BigInteger *res = new BigInteger[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] + o;
-    return MatrixBigInteger(M, N, res);
+    BigInteger *res = new BigInteger[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] + o;
+    return MatrixBigInteger(c.M, c.N, res);
 }
 
-MatrixBigInteger MatrixBigInteger::operator-(MatrixBigInteger &o)
+MatrixBigInteger operator-(const MatrixBigInteger &c, const MatrixBigInteger &o)
 {
-    return Subtract(o);
+    return c.Subtract(o);
 }
 
-MatrixBigInteger MatrixBigInteger::operator-(const BigInteger &o)
+MatrixBigInteger operator-(const MatrixBigInteger &c, const BigInteger &o)
 {
-    BigInteger *res = new BigInteger[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] - o;
-    return MatrixBigInteger(M, N, res);
+    BigInteger *res = new BigInteger[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] - o;
+    return MatrixBigInteger(c.M, c.N, res);
 }
 
-MatrixBigInteger MatrixBigInteger::operator*(MatrixBigInteger &o)
+MatrixBigInteger operator*(const MatrixBigInteger &c, const MatrixBigInteger &o)
 {
-    return Multiply(o);
+    return c.Multiply(o);
 }
 
-MatrixBigInteger MatrixBigInteger::operator*(const BigInteger &o)
+MatrixBigInteger operator*(const MatrixBigInteger &c, const BigInteger &o)
 {
-    BigInteger *res = new BigInteger[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            res[j + i * N] = Array[j + i * N] * o;
-    return MatrixBigInteger(M, N, res);
+    BigInteger *res = new BigInteger[c.M * c.N];
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            res[j + i * c.N] = c.Array[j + i * c.N] * o;
+    return MatrixBigInteger(c.M, c.N, res);
 }
 
-bool MatrixBigInteger::operator==(MatrixBigInteger &o)
+bool operator==(const MatrixBigInteger &c, const MatrixBigInteger &o)
 {
-    if (M != o.M || N != o.N)
+    if (c.M != o.M || c.N != o.N)
         return false;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            if (Array[j + i * N] != o.Array[j + i * N])
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            if (c.Array[j + i * c.N] != o.Array[j + i * c.N])
                 return false;
     return true;
 }
 
-bool MatrixBigInteger::operator!=(MatrixBigInteger &o)
+bool operator!=(const MatrixBigInteger &c, const MatrixBigInteger &o)
 {
-    if (M != o.M || N != o.N)
+    if (c.M != o.M || c.N != o.N)
         return true;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            if (Array[j + i * N] != o.Array[j + i * N])
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            if (c.Array[j + i * c.N] != o.Array[j + i * c.N])
                 return true;
     return false;
 }
@@ -676,66 +760,97 @@ MatrixBigInteger &MatrixBigInteger::operator=(const MatrixBigInteger &o)
     return *this;
 }
 
-MatrixBigInteger &MatrixBigInteger::operator+=(MatrixBigInteger &o)
+MatrixBigInteger &MatrixBigInteger::operator=(MatrixBigInteger &&o) noexcept
 {
-    if (o.M != M || o.N != N)
-        return *this;
+    if (this != &o)
+    {
+        delete[] Array;
+        M = o.M;
+        N = o.N;
+        Array = o.Array;
+        o.M = o.N = 0;
+        o.Array = nullptr;
+    }
+    return *this;
+}
+
+MatrixBigInteger &operator+=(MatrixBigInteger &c, const MatrixBigInteger &o)
+{
+    if (o.M != c.M || o.N != c.N)
+        return c;
     const BigInteger *otherArr = o.Array;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] += otherArr[j + i * N];
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] += otherArr[j + i * c.N];
+    return c;
 }
 
-MatrixBigInteger &MatrixBigInteger::operator+=(const BigInteger &o)
+MatrixBigInteger &operator+=(MatrixBigInteger &c, const BigInteger &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] += o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] += o;
+    return c;
 }
 
-MatrixBigInteger &MatrixBigInteger::operator-=(MatrixBigInteger &o)
+MatrixBigInteger &operator-=(MatrixBigInteger &c, const MatrixBigInteger &o)
 {
-    if (o.M != M || o.N != N)
-        return *this;
+    if (o.M != c.M || o.N != c.N)
+        return c;
     const BigInteger *otherArr = o.Array;
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] -= otherArr[j + i * N];
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] -= otherArr[j + i * c.N];
+    return c;
 }
 
-MatrixBigInteger &MatrixBigInteger::operator-=(const BigInteger &o)
+MatrixBigInteger &operator-=(MatrixBigInteger &c, const BigInteger &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] -= o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] -= o;
+    return c;
 }
 
-MatrixBigInteger &MatrixBigInteger::operator*=(MatrixBigInteger &o)
+MatrixBigInteger &operator*=(MatrixBigInteger &c, const MatrixBigInteger &o)
 {
-    if (N != o.M)
-        return *this;
-    return *this = Multiply(o);
+    if (c.N != o.M)
+        return c;
+    const uc resM = c.M, resN = o.N;
+    BigInteger *otherArr = o.Array;
+    BigInteger *res = new BigInteger[resM * resN];
+    for (uc i = 0; i < resM; i++)
+    {
+        for (uc j = 0; j < resN; j++)
+        {
+            BigInteger sum;
+            for (uc k = 0; k < c.N; k++)
+                sum += c.Array[k + i * c.N] * otherArr[j + k * resN];
+            res[j + i * resN] = sum;
+        }
+    }
+    c.M = resM;
+    c.N = resN;
+    delete[] c.Array;
+    c.Array = res;
+    return c;
 }
 
-MatrixBigInteger &MatrixBigInteger::operator*=(const BigInteger &o)
+MatrixBigInteger &operator*=(MatrixBigInteger &c, const BigInteger &o)
 {
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] *= o;
-    return *this;
+    for (uc i = 0; i < c.M; i++)
+        for (uc j = 0; j < c.N; j++)
+            c.Array[j + i * c.N] *= o;
+    return c;
 }
 
-ostream &operator<<(ostream &out, const MatrixBigInteger &curr)
+ostream &operator<<(ostream &out, const MatrixBigInteger &c)
 {
-    const uc M = curr.M, N = curr.N;
+    const uc M = c.M, N = c.N;
     for (uc i = 0; i < M; i++)
     {
         for (uc j = 0; j < N; j++)
-            out << curr[j + i * N] << " ";
+            out << c[j + i * N] << " ";
         out << endl;
     }
     return out;

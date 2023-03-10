@@ -155,7 +155,7 @@ inline static ld performOperation(const ld &x, const uc &op, const ld &y = 10)
 }
 
 // Evaluating any given expression with logarithmic, trigonometric functions - returning a double.
-ld evaluateExpressionD(string s) noexcept
+ld evaluateExpressionD(string &s) noexcept
 {
     try
     {
@@ -337,7 +337,395 @@ ld evaluateExpressionD(string s) noexcept
     }
 }
 
-ld evaluateExpressionDWithoutPreprocessing(string s) noexcept
+ld evaluateExpressionD(string &&s) noexcept
+{
+    try
+    {
+        preprocessAndValidate(s);
+        const ui N = static_cast<ui>(s.length());
+        if (N == 0)
+            return 0;
+        stack<string> operators;
+        stack<ld> operands;
+        ui i = 0;
+        while (i < N)
+        {
+            if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
+            {
+                ui j = i;
+                while (i < N && s[i] != '(')
+                    i++;
+                if (i == N)
+                {
+                    const char *e = "Wrong syntax or unknown symbols in the input!";
+                    cerr << e << endl;
+                    throw e;
+                }
+                string op = s.substr(j, i - j);
+                getFunction(op);
+                operators.push(op);
+                operators.push("(");
+                i++;
+            }
+            else if (s[i] >= '0' && s[i] <= '9')
+            {
+                ui j = i;
+                while (i < N && ((s[i] >= '0' && s[i] <= '9') || s[i] == '.'))
+                    i++;
+                ld num = stod(s.substr(j, i - j));
+                operands.push(num);
+            }
+            else if (s[i] == '(')
+            {
+                operators.push("(");
+                i++;
+            }
+            else if (s[i] == ')' || s[i] == ',')
+            {
+                while (!operators.empty() && operators.top() != "(")
+                {
+                    string op = operators.top();
+                    operators.pop();
+                    uc f = getFunction(op);
+                    if (f > 3 && f != 18)
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld num = operands.top();
+                        operands.pop();
+                        operands.push(performOperation(num, f));
+                    }
+                    else
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n2 = operands.top();
+                        operands.pop();
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n1 = operands.top();
+                        operands.pop();
+                        if (f != 18)
+                            operands.push(performOperation(n2, n1, op));
+                        else
+                            operands.push(performOperation(n1, f, n2));
+                    }
+                }
+                if (s[i] == ')')
+                    operators.pop();
+                i++;
+            }
+            else if ((s[i] == '+' || s[i] == '-') && (i == 0 || s[i - 1] == '^' || ((s[i - 1] < '0' || s[i - 1] > '9') && s[i - 1] != ')')))
+            {
+                if (i + 1 == N || s[i + 1] == '+' || s[i + 1] == '-' || s[i + 1] == '*' || s[i + 1] == '/' || s[i + 1] == '%' || s[i + 1] == '^')
+                    throw "bad input!";
+                if (s[i + 1] >= '0' && s[i + 1] <= '9')
+                {
+                    ui j = ++i;
+                    while (i < N && ((s[i] >= '0' && s[i] <= '9') || s[i] == '.'))
+                        i++;
+                    ld num = stod(s.substr(j, i - j));
+                    operands.push(s[j - 1] == '-' ? -num : num);
+                }
+                else
+                {
+                    operators.push(s[i] == '-' ? "-" : "+");
+                    operands.push(0);
+                    i++;
+                }
+            }
+            else if (i > 0 && (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/' || s[i] == '%' || s[i] == '^') && ((s[i - 1] >= '0' && s[i - 1] <= '9') || s[i - 1] == ')'))
+            {
+                const string currOp(1, s[i]);
+                uc f, curr = getFunction(currOp);
+                while (!operators.empty() && ((f = getFunction(operators.top())) > curr || (f == curr && curr < 3)))
+                {
+                    string op = operators.top();
+                    operators.pop();
+                    if (f > 3 && f != 18)
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld num = operands.top();
+                        operands.pop();
+                        operands.push(performOperation(num, f));
+                    }
+                    else
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n2 = operands.top();
+                        operands.pop();
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n1 = operands.top();
+                        operands.pop();
+                        if (f != 18)
+                            operands.push(performOperation(n2, n1, op));
+                        else
+                            operands.push(performOperation(n1, f, n2));
+                    }
+                }
+                operators.push(currOp);
+                i++;
+            }
+            else
+                throw "bad input!";
+        }
+        while (!operators.empty())
+        {
+            string op = operators.top();
+            if (op == "(")
+                throw "bad input!";
+            operators.pop();
+            uc f = getFunction(op);
+            if (f > 3 && f != 18)
+            {
+                if (operands.empty())
+                    throw "bad input!";
+                ld num = operands.top();
+                operands.pop();
+                operands.push(performOperation(num, f));
+            }
+            else
+            {
+                if (operands.empty())
+                    throw "bad input!";
+                ld n2 = operands.top();
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                ld n1 = operands.top();
+                operands.pop();
+                if (f != 18)
+                    operands.push(performOperation(n2, n1, op));
+                else
+                    operands.push(performOperation(n1, f, n2));
+            }
+        }
+        if (operands.empty() || !operators.empty() || operands.size() > 1)
+            throw "bad input!";
+        return operands.top();
+    }
+    catch (string e)
+    {
+        cerr << e << endl;
+        return 0.0;
+    }
+    catch (...)
+    {
+        cerr << "bad input!" << endl;
+        return 0.0;
+    }
+}
+
+ld evaluateExpressionDWithoutPreprocessing(const string &s) noexcept
+{
+    try
+    {
+        char prev = '\0';
+        const unsigned int N = static_cast<unsigned int>(s.length());
+        if (N == 0)
+            return 0;
+        stack<string> operators;
+        stack<ld> operands;
+        unsigned int i = 0;
+        while (i < N)
+        {
+            if (s[i] == ' ')
+                i++;
+            else if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
+            {
+                string substr;
+                while (i < N && (s[i] != '(' || s[i] == ' '))
+                {
+                    if (s[i] != ' ')
+                        substr += s[i];
+                    i++;
+                }
+                if (i == N)
+                {
+                    const char *e = "Wrong syntax or unknown symbols in the input!";
+                    cerr << e << endl;
+                    throw e;
+                }
+                getFunction(substr);
+                operators.push(substr);
+                operators.push("(");
+                prev = substr[0];
+                i++;
+            }
+            else if (isdigit(s[i]))
+            {
+                string substr;
+                while (i < N && (isdigit(s[i]) || s[i] == '.' || s[i] == ' '))
+                {
+                    if (s[i] != ' ')
+                        substr += s[i];
+                    i++;
+                }
+                ld num = stod(substr);
+                operands.push(num);
+                prev = substr[substr.length() - 1];
+            }
+            else if (s[i] == '(')
+            {
+                operators.push("(");
+                prev = '(';
+                i++;
+            }
+            else if (s[i] == ')' || s[i] == ',')
+            {
+                while (!operators.empty() && operators.top() != "(")
+                {
+                    string op = operators.top();
+                    operators.pop();
+                    unsigned char f = getFunction(op);
+                    if (f > 3 && f != 18)
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld num = operands.top();
+                        operands.pop();
+                        operands.push(performOperation(num, f));
+                    }
+                    else
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n2 = operands.top();
+                        operands.pop();
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n1 = operands.top();
+                        operands.pop();
+                        if (f != 18)
+                            operands.push(performOperation(n2, n1, op));
+                        else
+                            operands.push(performOperation(n1, f, n2));
+                    }
+                }
+                if (s[i] == ')')
+                    operators.pop();
+                prev = s[i];
+                i++;
+            }
+            else if ((s[i] == '+' || s[i] == '-') && (i == 0 || prev == '^' || (!isdigit(prev) && prev != ')')))
+            {
+                unsigned int j = i + 1;
+                while (j < N && s[j] == ' ')
+                    j++;
+                if (j == N || s[j] == '+' || s[j] == '-' || s[j] == '*' || s[j] == '/' || s[j] == '%' || s[j] == '^')
+                    throw "bad input!";
+                if (isdigit(s[j]))
+                {
+                    string substr;
+                    while (j < N && (isdigit(s[j]) || s[j] == '.' || s[j] == ' '))
+                    {
+                        if (s[j] != ' ')
+                            substr += s[j];
+                        j++;
+                    }
+                    ld num = stod(substr);
+                    operands.push(s[i] == '-' ? -num : num);
+                    prev = substr[substr.length() - 1];
+                    i = j;
+                }
+                else
+                {
+                    operators.push(s[i] == '-' ? "-" : "+");
+                    operands.push(0);
+                    prev = s[i];
+                    i++;
+                }
+            }
+            else if (i > 0 && (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/' || s[i] == '%' || s[i] == '^') && (isdigit(prev) || prev == ')'))
+            {
+                const string currOp(1, s[i]);
+                unsigned char f, curr = getFunction(currOp);
+                while (!operators.empty() && ((f = getFunction(operators.top())) > curr || (f == curr && curr < 3)))
+                {
+                    string op = operators.top();
+                    operators.pop();
+                    if (f > 3 && f != 18)
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld num = operands.top();
+                        operands.pop();
+                        operands.push(performOperation(num, f));
+                    }
+                    else
+                    {
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n2 = operands.top();
+                        operands.pop();
+                        if (operands.empty())
+                            throw "bad input!";
+                        ld n1 = operands.top();
+                        operands.pop();
+                        if (f != 18)
+                            operands.push(performOperation(n2, n1, op));
+                        else
+                            operands.push(performOperation(n1, f, n2));
+                    }
+                }
+                operators.push(currOp);
+                prev = s[i];
+                i++;
+            }
+            else
+                throw "bad input!";
+        }
+        while (!operators.empty())
+        {
+            string op = operators.top();
+            if (op == "(")
+                throw "bad input!";
+            operators.pop();
+            unsigned char f = getFunction(op);
+            if (f > 3 && f != 18)
+            {
+                if (operands.empty())
+                    throw "bad input!";
+                ld num = operands.top();
+                operands.pop();
+                operands.push(performOperation(num, f));
+            }
+            else
+            {
+                if (operands.empty())
+                    throw "bad input!";
+                ld n2 = operands.top();
+                operands.pop();
+                if (operands.empty())
+                    throw "bad input!";
+                ld n1 = operands.top();
+                operands.pop();
+                if (f != 18)
+                    operands.push(performOperation(n2, n1, op));
+                else
+                    operands.push(performOperation(n1, f, n2));
+            }
+        }
+        if (operands.empty() || !operators.empty() || operands.size() > 1)
+            throw "bad input!";
+        return operands.top();
+    }
+    catch (string e)
+    {
+        cerr << e << endl;
+        return 0.0;
+    }
+    catch (...)
+    {
+        cerr << "bad input!" << endl;
+        return 0.0;
+    }
+}
+
+ld evaluateExpressionDWithoutPreprocessing(string &&s) noexcept
 {
     try
     {

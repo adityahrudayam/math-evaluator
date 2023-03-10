@@ -1,24 +1,24 @@
 #pragma once
 
 #include <vector>
-#include <string>
+// #include <string>
 #include "Matrix.hpp"
 
 using std::vector;
-
-string findOrderOfMinOps(uc[], ui);
 
 template <class T>
 concept Matrix = std::is_same<T, MatrixLD>::value || std::is_same<T, MatrixLL>::value || std::is_same<T, MatrixBigInteger>::value;
 
 template <Matrix T>
-T multiplyAndGetResult(vector<T> &);
+T performOperation(T &, T &, char &);
 
 template <Matrix T>
 T matrixExpEval(string &, vector<T> &);
 
+string findOrderOfMinOps(uc[], const ui &);
+
 template <Matrix T>
-T performOperation(const T &, const T &, char &);
+T multiplyAndGetResult(vector<T> &);
 
 void takeInputAndEvalLD();
 

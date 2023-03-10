@@ -18,8 +18,10 @@ inline static ll performOperation(const ll &, const ll &, const std::string &);
 
 /**
  * Parameters:
- * s – The string expression to evaluate.
+ * string s – The string expression to evaluate.
  * Returns:
  * The function evaluates an expression & returns a 64-bit integer.
  */
-ll evaluateExpressionI(std::string) noexcept;
+ll evaluateExpressionI(std::string &) noexcept;
+
+ll evaluateExpressionI(std::string &&) noexcept;

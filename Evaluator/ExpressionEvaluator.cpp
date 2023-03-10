@@ -79,7 +79,7 @@ inline static uc getFunction(const string &s)
     throw "bad input!";
 }
 
-inline static BigInteger performOperation(BigInteger &a, BigInteger &b, const string &op)
+inline static BigInteger performOperation(const BigInteger &a, const BigInteger &b, const string &op)
 {
     if (op.empty())
         throw "bad input!";
@@ -151,7 +151,220 @@ inline static BigInteger performOperation(BigInteger &a, BigInteger &b, const st
 // }
 
 // IN NEXT VERSION, THERE'LL BE AN ADDITION OF MATH FUNCTIONS & MORE
-BigInteger evaluateExpression(string s) noexcept
+BigInteger evaluateExpression(const string &s) noexcept
+{
+    try
+    {
+        uc prev = '\0';
+        const ui N = static_cast<ui>(s.length());
+        if (N == 0)
+            return BigInteger();
+        stack<string> operators;
+        stack<BigInteger> operands;
+        ui i = 0;
+        while (i < N)
+        {
+            if (s[i] == ' ')
+                i++;
+            // -------------IN NEXT VERSION------------
+            // else if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
+            // {
+            //     string substr;
+            //     while (i < N && (s[i] != '(' || s[i] == ' '))
+            //     {
+            //         if (s[i] != ' ')
+            //             substr += s[i];
+            //         i++;
+            //     }
+            //     if (i == N)
+            //     {
+            //         const char *e = "Wrong syntax or unknown symbols in the input!";
+            //         cout << e << endl;
+            //         throw e;
+            //     }
+            //     getFunction(substr);
+            //     operators.push(substr);
+            //     operators.push("(");
+            //     prev = substr[0];
+            //     i++;
+            // }
+            else if (s[i] >= '0' && s[i] <= '9')
+            {
+                string substr;
+                while (i < N && ((s[i] >= '0' && s[i] <= '9') || s[i] == '.' || s[i] == ' '))
+                {
+                    if (s[i] == '.')
+                        throw "bad input! fractional numbers not allowed.";
+                    if (s[i] != ' ')
+                        substr += s[i];
+                    i++;
+                }
+                operands.push(BigInteger(substr));
+                prev = substr[substr.length() - 1];
+            }
+            else if (s[i] == '(')
+            {
+                operators.push("(");
+                prev = '(';
+                i++;
+            }
+            else if (s[i] == ')')
+            {
+                while (!operators.empty() && operators.top() != "(")
+                {
+                    string op = operators.top();
+                    operators.pop();
+                    // uc f = getFunction(op);
+                    // --------------IN NEXT VERSION--------------
+                    // if (f > 3 && f != 18)
+                    // {
+                    //     if (operands.empty())
+                    //         throw "bad input!";
+                    //     ld num = operands.top();
+                    //     operands.pop();
+                    //     operands.push(performOperation(num, f));
+                    // }
+                    // else
+                    // {
+                    if (operands.empty())
+                        throw "bad input!";
+                    BigInteger n2 = operands.top();
+                    operands.pop();
+                    if (operands.empty())
+                        throw "bad input!";
+                    BigInteger n1 = operands.top();
+                    operands.pop();
+                    // if (f != 18)
+                    operands.push(performOperation(n1, n2, op));
+                    // else
+                    //     operands.push(performOperation(n1, f, n2));
+                    // }
+                }
+                operators.pop();
+                prev = s[i];
+                i++;
+            }
+            else if ((s[i] == '+' || s[i] == '-') && (i == 0 || prev == '^' || ((prev < '0' || prev > '9') && prev != ')')))
+            {
+                string substr;
+                if (s[i] == '-')
+                    substr.push_back('-');
+                ui j = i + 1;
+                while (j < N && s[j] == ' ')
+                    j++;
+                if (j == N || s[j] == '+' || s[j] == '-' || s[j] == '*' || s[j] == '/' || s[j] == '^')
+                    throw "bad input!";
+                if (s[j] >= '0' && s[j] <= '9')
+                {
+                    while (j < N && ((s[j] >= '0' && s[j] <= '9') || s[j] == '.' || s[j] == ' '))
+                    {
+                        if (s[j] == '.')
+                            throw "bad input! fractional numbers not allowed.";
+                        if (s[j] != ' ')
+                            substr += s[j];
+                        j++;
+                    }
+                    operands.push(BigInteger(substr));
+                    prev = substr[substr.length() - 1];
+                    i = j;
+                }
+                else
+                {
+                    operators.push(s[i] == '-' ? "-" : "+");
+                    operands.push(BigInteger());
+                    prev = s[i];
+                    i++;
+                }
+            }
+            else if (i > 0 && (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/' || s[i] == '^') && ((prev >= '0' && prev <= '9') || prev == ')'))
+            {
+                const string currOp(1, s[i]);
+                uc f, curr = getFunction(currOp);
+                while (!operators.empty() && ((f = getFunction(operators.top())) > curr || (f == curr && curr < 3)))
+                {
+                    string op = operators.top();
+                    operators.pop();
+                    // --------------IN NEXT VERSION--------------
+                    // if (f > 3 && f != 18)
+                    // {
+                    //     if (operands.empty())
+                    //         throw "bad input!";
+                    //     ld num = operands.top();
+                    //     operands.pop();
+                    //     operands.push(performOperation(num, f));
+                    // }
+                    // else
+                    // {
+                    if (operands.empty())
+                        throw "bad input!";
+                    BigInteger n2 = operands.top();
+                    operands.pop();
+                    if (operands.empty())
+                        throw "bad input!";
+                    BigInteger n1 = operands.top();
+                    operands.pop();
+                    // if (f != 18)
+                    operands.push(performOperation(n1, n2, op));
+                    // else
+                    //     operands.push(performOperation(n1, f, n2));
+                    // }
+                }
+                operators.push(currOp);
+                prev = s[i];
+                i++;
+            }
+            else
+                throw "bad input!";
+        }
+        while (!operators.empty())
+        {
+            string op = operators.top();
+            if (op == "(")
+                throw "bad input!";
+            operators.pop();
+            // uc f = getFunction(op);
+            // --------------IN NEXT VERSION-------------
+            // if (f > 3 && f != 18)
+            // {
+            //     if (operands.empty())
+            //         throw "bad input!";
+            //     ld num = operands.top();
+            //     operands.pop();
+            //     operands.push(performOperation(num, f));
+            // }
+            // else
+            // {
+            if (operands.empty())
+                throw "bad input!";
+            BigInteger n2 = operands.top();
+            operands.pop();
+            if (operands.empty())
+                throw "bad input!";
+            BigInteger n1 = operands.top();
+            operands.pop();
+            // if (f != 18)
+            operands.push(performOperation(n1, n2, op));
+            // else
+            //     operands.push(performOperation(n1, f, n2));
+            // }
+        }
+        if (operands.empty() || !operators.empty() || operands.size() > 1)
+            throw "bad input!";
+        return operands.top();
+    }
+    catch (string e)
+    {
+        cout << e << endl;
+        return BigInteger();
+    }
+    catch (...)
+    {
+        cout << "bad input!" << endl;
+        return BigInteger();
+    }
+}
+
+BigInteger evaluateExpression(string &&s) noexcept
 {
     try
     {
