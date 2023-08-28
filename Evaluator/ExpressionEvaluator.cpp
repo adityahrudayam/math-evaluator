@@ -7,7 +7,7 @@ using std::cout;
 using std::endl;
 using std::stack;
 
-// inline static void preprocessAndValidate(string &s)
+//  static void preprocessAndValidate(string &s)
 // {
 //     if (!s.empty() && (s[0] == '*' || s[0] == '/' || s[0] == '^'))
 //         throw "bad input!";
@@ -33,7 +33,7 @@ using std::stack;
 //     // cout << s << endl;
 // }
 
-inline static uc getFunction(const string &s)
+static uc getFunction(const string &s)
 {
     string f = s;
     for (char &c : f)
@@ -79,7 +79,7 @@ inline static uc getFunction(const string &s)
     throw "bad input!";
 }
 
-inline static BigInteger performOperation(const BigInteger &a, const BigInteger &b, const string &op)
+static BigInteger performOperation(const BigInteger &a, const BigInteger &b, const string &op)
 {
     if (op.empty())
         throw "bad input!";
@@ -104,7 +104,7 @@ inline static BigInteger performOperation(const BigInteger &a, const BigInteger 
     };
 }
 
-// inline static ld performOperation(const ld &x, const uc &op, const ld &y = 10)
+//  static ld performOperation(const ld &x, const uc &op, const ld &y = 10)
 // {
 //     ld deg = x * M_PI / 180;
 //     switch (op)

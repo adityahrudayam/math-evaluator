@@ -20,11 +20,11 @@ private:
     ld *Array;
 
 public:
-    explicit MatrixLD();
+    MatrixLD();
 
-    explicit MatrixLD(const uc, const uc, ld *);
+    MatrixLD(const uc, const uc, ld *);
 
-    explicit MatrixLD(const uc, const uc, const string *);
+    MatrixLD(const uc, const uc, const string *);
 
     MatrixLD(const MatrixLD &);
 
@@ -80,11 +80,11 @@ private:
     ll *Array;
 
 public:
-    explicit MatrixLL();
+    MatrixLL();
 
-    explicit MatrixLL(const uc, const uc, ll *);
+    MatrixLL(const uc, const uc, ll *);
 
-    explicit MatrixLL(const uc, const uc, string *);
+    MatrixLL(const uc, const uc, string *);
 
     MatrixLL(const MatrixLL &);
 
@@ -140,11 +140,11 @@ private:
     BigInteger *Array;
 
 public:
-    explicit MatrixBigInteger();
+    MatrixBigInteger();
 
-    explicit MatrixBigInteger(const uc, const uc, BigInteger *);
+    MatrixBigInteger(const uc, const uc, BigInteger *);
 
-    explicit MatrixBigInteger(const uc, const uc, const string *);
+    MatrixBigInteger(const uc, const uc, const string *);
 
     MatrixBigInteger(const MatrixBigInteger &);
 

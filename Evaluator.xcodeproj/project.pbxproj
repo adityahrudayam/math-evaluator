@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D649800A29B391FA009BD6B7 /* BigInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D649800129B391F9009BD6B7 /* BigInteger.cpp */; };
+		D649800B29B391FA009BD6B7 /* EvaluateExpressionD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D649800229B391F9009BD6B7 /* EvaluateExpressionD.cpp */; };
+		D649800C29B391FA009BD6B7 /* ExpressionEvaluator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D649800429B391F9009BD6B7 /* ExpressionEvaluator.cpp */; };
+		D649800D29B391FA009BD6B7 /* EvaluateExpressionI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D649800529B391F9009BD6B7 /* EvaluateExpressionI.cpp */; };
+		D649800E29B391FA009BD6B7 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D649800729B391F9009BD6B7 /* Matrix.cpp */; };
+		D649800F29B391FA009BD6B7 /* MatrixOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D649800929B391FA009BD6B7 /* MatrixOperator.cpp */; };
 		D65C8123299B020200D482C5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D65C8122299B020200D482C5 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +29,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D6497FFE29B391F9009BD6B7 /* MatrixOperator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MatrixOperator.hpp; sourceTree = "<group>"; };
+		D6497FFF29B391F9009BD6B7 /* EvaluateExpressionD.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EvaluateExpressionD.hpp; sourceTree = "<group>"; };
+		D649800029B391F9009BD6B7 /* BigInteger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BigInteger.hpp; sourceTree = "<group>"; };
+		D649800129B391F9009BD6B7 /* BigInteger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BigInteger.cpp; sourceTree = "<group>"; };
+		D649800229B391F9009BD6B7 /* EvaluateExpressionD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EvaluateExpressionD.cpp; sourceTree = "<group>"; };
+		D649800329B391F9009BD6B7 /* EvaluateExpressionI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EvaluateExpressionI.hpp; sourceTree = "<group>"; };
+		D649800429B391F9009BD6B7 /* ExpressionEvaluator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExpressionEvaluator.cpp; sourceTree = "<group>"; };
+		D649800529B391F9009BD6B7 /* EvaluateExpressionI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EvaluateExpressionI.cpp; sourceTree = "<group>"; };
+		D649800629B391F9009BD6B7 /* ExpressionEvaluator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExpressionEvaluator.hpp; sourceTree = "<group>"; };
+		D649800729B391F9009BD6B7 /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
+		D649800829B391F9009BD6B7 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		D649800929B391FA009BD6B7 /* MatrixOperator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatrixOperator.cpp; sourceTree = "<group>"; };
 		D65C811F299B020200D482C5 /* Evaluator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Evaluator; sourceTree = BUILT_PRODUCTS_DIR; };
 		D65C8122299B020200D482C5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +76,18 @@
 			isa = PBXGroup;
 			children = (
 				D65C8122299B020200D482C5 /* main.cpp */,
+				D649800129B391F9009BD6B7 /* BigInteger.cpp */,
+				D649800029B391F9009BD6B7 /* BigInteger.hpp */,
+				D649800229B391F9009BD6B7 /* EvaluateExpressionD.cpp */,
+				D6497FFF29B391F9009BD6B7 /* EvaluateExpressionD.hpp */,
+				D649800529B391F9009BD6B7 /* EvaluateExpressionI.cpp */,
+				D649800329B391F9009BD6B7 /* EvaluateExpressionI.hpp */,
+				D649800429B391F9009BD6B7 /* ExpressionEvaluator.cpp */,
+				D649800629B391F9009BD6B7 /* ExpressionEvaluator.hpp */,
+				D649800729B391F9009BD6B7 /* Matrix.cpp */,
+				D649800829B391F9009BD6B7 /* Matrix.hpp */,
+				D649800929B391FA009BD6B7 /* MatrixOperator.cpp */,
+				D6497FFE29B391F9009BD6B7 /* MatrixOperator.hpp */,
 			);
 			path = Evaluator;
 			sourceTree = "<group>";
@@ -89,7 +119,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					D65C811E299B020200D482C5 = {
 						CreatedOnToolsVersion = 14.2;
@@ -119,7 +149,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D649800F29B391FA009BD6B7 /* MatrixOperator.cpp in Sources */,
+				D649800E29B391FA009BD6B7 /* Matrix.cpp in Sources */,
+				D649800B29B391FA009BD6B7 /* EvaluateExpressionD.cpp in Sources */,
 				D65C8123299B020200D482C5 /* main.cpp in Sources */,
+				D649800D29B391FA009BD6B7 /* EvaluateExpressionI.cpp in Sources */,
+				D649800A29B391FA009BD6B7 /* BigInteger.cpp in Sources */,
+				D649800C29B391FA009BD6B7 /* ExpressionEvaluator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +195,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -176,7 +213,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -217,6 +254,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -228,7 +266,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -239,6 +277,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -247,6 +286,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -7,7 +7,7 @@ using std::cout;
 using std::endl;
 using std::stack;
 
-inline static void preprocessAndValidate(std::string &s)
+static void preprocessAndValidate(std::string &s)
 {
     if (!s.empty() && (s[0] == '*' || s[0] == '/' || s[0] == '^' || s[0] == '%'))
         throw "bad input!";
@@ -34,7 +34,7 @@ inline static void preprocessAndValidate(std::string &s)
     // cout << s << endl;
 }
 
-inline static uc getFunction(const std::string &s)
+static uc getFunction(const std::string &s)
 {
     std::string f = s;
     for (char &c : f)
@@ -80,7 +80,7 @@ inline static uc getFunction(const std::string &s)
     throw "bad input!";
 }
 
-inline static ll powI(ll x, ll n)
+static ll powI(ll x, ll n)
 {
     if (x == 0)
     {
@@ -98,7 +98,7 @@ inline static ll powI(ll x, ll n)
         return powI(x * x, n / 2);
 }
 
-inline static ll performOperation(const ll &b, const ll &a, const std::string &op)
+static ll performOperation(const ll &b, const ll &a, const std::string &op)
 {
     if (op.empty())
         throw "bad input!";
@@ -134,7 +134,7 @@ inline static ll performOperation(const ll &b, const ll &a, const std::string &o
     };
 }
 
-inline static ll performOperation(const ll &x, const uc &op, const ll &y = 10)
+static ll performOperation(const ll &x, const uc &op, const ll &y = 10)
 {
     long double deg = x * M_PI / 180;
     switch (op)

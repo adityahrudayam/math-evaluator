@@ -18,7 +18,7 @@ using std::endl;
 
 void test()
 {
-    // LoadLDMFromFile("./matrices.txt", 0LL);
+    // LoadLDMFromFile("./matrices.txt");
     string temp[6] = {"1", "2", "3", "4", "5", "6"};
     MatrixLD mat('\02', '\03', temp);
     cout << mat << endl;
@@ -225,9 +225,62 @@ void test()
     cout << evaluateExpressionI("-2^-2^1+log2(2^-4*4)^1^log2(2^log(4,4)+log2(8))^0.8+log2(2)"s) << endl;         // -0.75
 }
 
+char run()
+{
+    cout << "1: write and evaluate an integer (not big numbers) math expression" << endl;
+    cout << "2: write and evaluate a big integer (1 to 10^5 digits at most) math expression" << endl;
+    cout << "3: write and evaluate a decimal math expression" << endl;
+    cout << "4: write matrices as input and add the matrices" << endl;
+    cout << "5: write matrices as input and subtract the matrices" << endl;
+    cout << "6: write matrices as input and multiply the matrices" << endl;
+    cout << "7: read from a file and evaluate a math expression involving matrices" << endl;
+    cout << "8: exit!" << endl;
+
+    string inp;
+    short opt;
+    cin >> opt;
+    switch (opt)
+    {
+    case 1:
+        cout << "please enter an integer expression to evaluate." << endl;
+        cin >> inp;
+        cout << "result: " << evaluateExpressionI(inp) << endl;
+        break;
+    case 2:
+        cout << "please enter a big integer expression to evaluate." << endl;
+        cin >> inp;
+        cout << "result: " << evaluateExpression(inp) << endl;
+        break;
+    case 3:
+        cout << "please enter a decimal expression to evaluate." << endl;
+        cin >> inp;
+        cout << "result: " << evaluateExpressionD(inp) << endl;
+        break;
+    case 4:
+        cout << "please enter the matrices expression to add." << endl;
+        cin >> inp;
+        cout << "result: " << evaluateExpressionD(inp) << endl;
+        break;
+    case 7:
+        cout << "please enter a decimal expression to evaluate." << endl;
+        cin >> inp;
+        cout << "result: " << evaluateExpressionD(inp) << endl;
+        break;
+    case 8:
+        cout << "EXITING..." << endl;
+        break;
+    default:
+        cout << "please enter a valid option from 1 to 8!" << endl;
+        break;
+    }
+    cout << endl;
+    return opt;
+}
+
 int main(int argc, const char *argv[])
 {
-    test();
+    while (run() != 8)
+        ;
 }
 
 // Double tests:

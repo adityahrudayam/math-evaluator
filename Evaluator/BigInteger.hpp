@@ -19,18 +19,18 @@ private:
 
     string BuildNumStr(ll &);
 
-    inline BigInteger SubtractionHelper(const BigInteger &, const ui &, const ui &) const;
+    BigInteger SubtractionHelper(const BigInteger &, const ui &, const ui &) const;
 
 public:
-    explicit BigInteger();
+    BigInteger();
 
-    explicit BigInteger(ll);
+    BigInteger(ll);
 
-    explicit BigInteger(const char *);
+    BigInteger(const char *);
 
-    explicit BigInteger(const string &);
+    BigInteger(const string &);
 
-    explicit BigInteger(const uc, const string &);
+    BigInteger(const uc, const string &);
 
     BigInteger(const BigInteger &);
 
@@ -59,7 +59,7 @@ public:
 
     void SetNum(const string &);
 
-    inline const uc operator[](const ui &) const;
+    const uc operator[](const ui &) const;
 
     friend BigInteger operator+(const BigInteger &, const BigInteger &);
     friend BigInteger operator+(const BigInteger &, const ll &);
