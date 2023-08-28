@@ -112,7 +112,7 @@ string BigInteger::BuildNumStr(ll &num)
     return res;
 }
 
-inline BigInteger BigInteger::SubtractionHelper(const BigInteger &o, const ui &M, const ui &N) const
+BigInteger BigInteger::SubtractionHelper(const BigInteger &o, const ui &M, const ui &N) const
 {
     if (*this < o)
     {
@@ -370,7 +370,7 @@ void BigInteger::SetNum(const string &num)
     this->Num = num;
 }
 
-inline const uc BigInteger::operator[](const ui &i) const
+const uc BigInteger::operator[](const ui &i) const
 {
     if (Num.length() <= i || i < 0)
         throw "invalid access!";
