@@ -1,5 +1,4 @@
 #include <iostream>
-#include <math.h>
 #include <stack>
 #include "ExpressionEvaluator.hpp"
 

@@ -248,7 +248,7 @@ void takeInputAndEvalBI()
     }
 }
 
-bool saveLDMToFile(const char *path, MatrixLD &obj)
+bool saveLDMToFile(const char *path, MatrixLD &obj) // incomplete
 {
     try
     {
@@ -268,7 +268,7 @@ bool saveLDMToFile(const char *path, MatrixLD &obj)
     }
 }
 
-void splitOnSymbol(string &s, const char &symbol)
+void splitOnSymbol(string &s, const char &symbol) 
 {
     ui idx = 0, N = static_cast<ui>(s.length());
     for (ui i = 0; i < s.length(); i++)
