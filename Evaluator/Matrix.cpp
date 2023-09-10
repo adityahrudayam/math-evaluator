@@ -188,15 +188,18 @@ bool operator!=(const MatrixLD &c, const MatrixLD &o)
 
 MatrixLD &MatrixLD::operator=(const MatrixLD &o)
 {
-    M = o.M;
-    N = o.N;
-    if (Array != nullptr)
-        delete[] Array;
-    const ld *copyArr = o.Array;
-    Array = new ld[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] = copyArr[j + i * N];
+    if (this != &o)
+    {
+        M = o.M;
+        N = o.N;
+        if (Array != nullptr)
+            delete[] Array;
+        const ld *copyArr = o.Array;
+        Array = new ld[M * N];
+        for (uc i = 0; i < M; i++)
+            for (uc j = 0; j < N; j++)
+                Array[j + i * N] = copyArr[j + i * N];
+    }
     return *this;
 }
 
@@ -468,15 +471,18 @@ bool operator!=(const MatrixLL &c, const MatrixLL &o)
 
 MatrixLL &MatrixLL::operator=(const MatrixLL &o)
 {
-    M = o.M;
-    N = o.N;
-    if (Array != nullptr)
-        delete[] Array;
-    const ll *copyArr = o.Array;
-    Array = new ll[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] = copyArr[j + i * N];
+    if (this != &o)
+    {
+        M = o.M;
+        N = o.N;
+        if (Array != nullptr)
+            delete[] Array;
+        const ll *copyArr = o.Array;
+        Array = new ll[M * N];
+        for (uc i = 0; i < M; i++)
+            for (uc j = 0; j < N; j++)
+                Array[j + i * N] = copyArr[j + i * N];
+    }
     return *this;
 }
 
@@ -748,15 +754,18 @@ bool operator!=(const MatrixBigInteger &c, const MatrixBigInteger &o)
 
 MatrixBigInteger &MatrixBigInteger::operator=(const MatrixBigInteger &o)
 {
-    M = o.M;
-    N = o.N;
-    if (Array != nullptr)
-        delete[] Array;
-    const BigInteger *copyArr = o.Array;
-    Array = new BigInteger[M * N];
-    for (uc i = 0; i < M; i++)
-        for (uc j = 0; j < N; j++)
-            Array[j + i * N] = copyArr[j + i * N];
+    if (this != &o)
+    {
+        M = o.M;
+        N = o.N;
+        if (Array != nullptr)
+            delete[] Array;
+        const BigInteger *copyArr = o.Array;
+        Array = new BigInteger[M * N];
+        for (uc i = 0; i < M; i++)
+            for (uc j = 0; j < N; j++)
+                Array[j + i * N] = copyArr[j + i * N];
+    }
     return *this;
 }
 

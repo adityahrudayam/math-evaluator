@@ -568,8 +568,11 @@ bool operator>=(const BigInteger &c, const BigInteger &o)
 
 BigInteger &BigInteger::operator=(const BigInteger &o)
 {
-    Sign = o.Sign;
-    Num = o.Num;
+    if (this != &o)
+    {
+        Sign = o.Sign;
+        Num = o.Num;
+    }
     return *this;
 }
 
