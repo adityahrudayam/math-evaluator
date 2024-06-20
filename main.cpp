@@ -1,11 +1,9 @@
-#include <iostream>
-#include<cmath>
-#include "ExpressionEvaluator.hpp"
 #include "EvaluateExpressionD.hpp"
 #include "EvaluateExpressionI.hpp"
+#include "ExpressionEvaluator.hpp"
 #include "MatrixOperator.hpp"
-
-using namespace std::string_literals;
+#include <cmath>
+#include <iostream>
 
 using std::cin;
 using std::cout;
@@ -21,33 +19,33 @@ void test()
     takeInputAndEvalLL();
     takeInputAndEvalBI();
 
-    cout << evaluateExpression(" 2-1 + 2 \n"s);            // 3
-    cout << evaluateExpression("(1+(4+5+2)-3)+(6+8)\n"s);  // 23
-    cout << evaluateExpression("- 2\n"s);                  // -2
-    cout << evaluateExpression("- (2) - (-3+4 - (6))\n"s); // 3
-    cout << evaluateExpression("1\n"s);                    // 1
-    cout << evaluateExpression("1/3*9\n"s);                // 0
-    cout << evaluateExpression("9*1/3\n"s);                // 3
-    cout << evaluateExpression("1-(     -2)\n"s);          // 3
-    cout << evaluateExpression("1-(     -2)^3\n"s);        // 1-(-8)=9
-    cout << evaluateExpression("1*5     -2^3\n"s);         // 5-8=-3
-    cout << evaluateExpression("1*5-(     -2)^3\n"s);      // 5-(-8)=13
-    cout << evaluateExpression("1/44-(     -2)^5\n"s);     // 32
-    cout << evaluateExpression("1-(     -2)^6\n"s);        // 1-64=-63
-    cout << evaluateExpression("1-(     -2)^3\n"s);        // 1-(-8)=9
-    cout << evaluateExpression("1-(     -2)^3^2\n"s);      // 1-(-2)^9=1-(-512)=513
-    cout << evaluateExpression("1-(     -2)^3^2^2\n"s);    // 1-(-2)^(3^4)
-    cout << evaluateExpression("1-(     -2)^2^2^2\n"s);    // 1-(-2)^16 = 1-65536=-65535
-    cout << evaluateExpression("-1+(     -2)^3\n"s);       // -1+(-8)=-9
-    cout << evaluateExpression("(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n"s);
-    cout << evaluateExpression("-(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n"s);
-    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4))\n"s);
-    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n"s);
-    cout << evaluateExpression("-(3*(5-(-8)^2-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n"s);
-    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))\n"s);
-    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^2\n"s);
-    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^3\n"s);
-    cout << evaluateExpression("(-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4))))^2\n"s);
+    cout << evaluateExpression(" 2-1 + 2 \n");            // 3
+    cout << evaluateExpression("(1+(4+5+2)-3)+(6+8)\n");  // 23
+    cout << evaluateExpression("- 2\n");                  // -2
+    cout << evaluateExpression("- (2) - (-3+4 - (6))\n"); // 3
+    cout << evaluateExpression("1\n");                    // 1
+    cout << evaluateExpression("1/3*9\n");                // 0
+    cout << evaluateExpression("9*1/3\n");                // 3
+    cout << evaluateExpression("1-(     -2)\n");          // 3
+    cout << evaluateExpression("1-(     -2)^3\n");        // 1-(-8)=9
+    cout << evaluateExpression("1*5     -2^3\n");         // 5-8=-3
+    cout << evaluateExpression("1*5-(     -2)^3\n");      // 5-(-8)=13
+    cout << evaluateExpression("1/44-(     -2)^5\n");     // 32
+    cout << evaluateExpression("1-(     -2)^6\n");        // 1-64=-63
+    cout << evaluateExpression("1-(     -2)^3\n");        // 1-(-8)=9
+    cout << evaluateExpression("1-(     -2)^3^2\n");      // 1-(-2)^9=1-(-512)=513
+    cout << evaluateExpression("1-(     -2)^3^2^2\n");    // 1-(-2)^(3^4)
+    cout << evaluateExpression("1-(     -2)^2^2^2\n");    // 1-(-2)^16 = 1-65536=-65535
+    cout << evaluateExpression("-1+(     -2)^3\n");       // -1+(-8)=-9
+    cout << evaluateExpression("(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n");
+    cout << evaluateExpression("-(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n");
+    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4))\n");
+    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n");
+    cout << evaluateExpression("-(3*(5-(-8)^2-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n");
+    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))\n");
+    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^2\n");
+    cout << evaluateExpression("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^3\n");
+    cout << evaluateExpression("(-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4))))^2\n");
     cout << "############ part-2 ###############" << endl;
     cout << evaluateExpression("1-2-3\n");        //-4
     cout << evaluateExpression("1-2^-3\n");       // 1-1/8=0.875
@@ -71,50 +69,50 @@ void test()
     cout << "-------------Important tests--------------" << endl;
     cout << evaluateExpression("-(+8 .8 8)+(9)-3 +(2^-5) -(-(+10))-loge(778.887 77)\n"); // 0.493383
     cout << evaluateExpression("-(+8 .8 8) -loge(778.887 77)\n");                        // -15.5379
-    cout << evaluateExpression("3^ log(4, 4)\n"s);                                       // 3
-    cout << evaluateExpression("log 2(3 ^ log(4,4))\n"s);                                // ~1.58
-    cout << evaluateExpression("log2(8)\n"s);                                            // 3
-    cout << evaluateExpression("log2(6)\n"s);                                            // 2.584
-    cout << evaluateExpression("log2(3^log(4,4)+log2(8))\n"s);                           // 2.584
-    cout << evaluateExpression("log2(3^log(4,4)+log2(8))^0.8\n"s);                       // 2.13
-    cout << evaluateExpression("log2(2)\n"s);                                            // 1
-    cout << evaluateExpression("log2(3^log(4,4)+log2(8))^0.8+log2(2)\n"s);               // 3.13
+    cout << evaluateExpression("3^ log(4, 4)\n");                                        // 3
+    cout << evaluateExpression("log 2(3 ^ log(4,4))\n");                                 // ~1.58
+    cout << evaluateExpression("log2(8)\n");                                             // 3
+    cout << evaluateExpression("log2(6)\n");                                             // 2.584
+    cout << evaluateExpression("log2(3^log(4,4)+log2(8))\n");                            // 2.584
+    cout << evaluateExpression("log2(3^log(4,4)+log2(8))^0.8\n");                        // 2.13
+    cout << evaluateExpression("log2(2)\n");                                             // 1
+    cout << evaluateExpression("log2(3^log(4,4)+log2(8))^0.8+log2(2)\n");                // 3.13
 
-    cout << evaluateExpression("log2(3^log2(4)+log2(8))^0.8+log2(2)\n");                                  // 3.77
-    cout << evaluateExpression("log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"s);                        // 3.05673
-    cout << evaluateExpression("-2^-2^1+log2(2^-4*4)^1^log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"s); // -0.75
-    cout << evaluateExpression("-2^-2^1+log2(2^-4*4)^1^log2(2^log(4,4)+log2(8))^0.8+log2(2)\n"s);         // -0.75
+    cout << evaluateExpression("log2(3^log2(4)+log2(8))^0.8+log2(2)\n");                                 // 3.77
+    cout << evaluateExpression("log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n");                        // 3.05673
+    cout << evaluateExpression("-2^-2^1+log2(2^-4*4)^1^log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"); // -0.75
+    cout << evaluateExpression("-2^-2^1+log2(2^-4*4)^1^log2(2^log(4,4)+log2(8))^0.8+log2(2)\n");         // -0.75
 
     cout << "--------------------------------------------" << endl;
 
-    cout << evaluateExpressionD("1    + 2  - 0.008\n"s);
-    cout << evaluateExpressionD(" 2-1 + 2 \n"s);
-    cout << evaluateExpressionD("(1+(4+5+2)-3)+(6+8)\n"s);
-    cout << evaluateExpressionD("- 2\n"s);
-    cout << evaluateExpressionD("- (2) - (-3+4 - (6))\n"s);
-    cout << evaluateExpressionD("1\n"s);
-    cout << evaluateExpressionD("1/3*9\n"s);             // 0
-    cout << evaluateExpressionD("9*1/3\n"s);             // 3
-    cout << evaluateExpressionD("1-(     -2)\n"s);       // 3
-    cout << evaluateExpressionD("1-(     -2)^3\n"s);     // 1-(-8)=9
-    cout << evaluateExpressionD("1*5     -2^3\n"s);      // 5-8=-3
-    cout << evaluateExpressionD("1*5-(     -2)^3\n"s);   // 5-(-8)=13
-    cout << evaluateExpressionD("1/44-(     -2)^5\n"s);  // 32
-    cout << evaluateExpressionD("1-(     -2)^6\n"s);     // 1-64=-63
-    cout << evaluateExpressionD("1-(     -2)^3\n"s);     // 1-(-8)=9
-    cout << evaluateExpressionD("1-(     -2)^3^2\n"s);   // 1-(-2)^9=1-(-512)=513
-    cout << evaluateExpressionD("1-(     -2)^3^2^2\n"s); // 1-(-2)^(3^4) - out of bounds
-    cout << evaluateExpressionD("1-(     -2)^2^2^2\n"s); // 1-(-2)^16 = 1-65536=-65535
-    cout << evaluateExpressionD("-1+(     -2)^3\n"s);    // -1+(-8)=-9
-    cout << evaluateExpressionD("(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n"s);
-    cout << evaluateExpressionD("-(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n"s);
-    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4))\n"s);
-    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n"s);
-    cout << evaluateExpressionD("-(3*(5-(-8)^2-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n"s);
-    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))\n"s);
-    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^2\n"s);
-    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^3\n"s);
-    cout << evaluateExpressionD("(-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4))))^2\n"s);
+    cout << evaluateExpressionD("1    + 2  - 0.008\n");
+    cout << evaluateExpressionD(" 2-1 + 2 \n");
+    cout << evaluateExpressionD("(1+(4+5+2)-3)+(6+8)\n");
+    cout << evaluateExpressionD("- 2\n");
+    cout << evaluateExpressionD("- (2) - (-3+4 - (6))\n");
+    cout << evaluateExpressionD("1\n");
+    cout << evaluateExpressionD("1/3*9\n");             // 0
+    cout << evaluateExpressionD("9*1/3\n");             // 3
+    cout << evaluateExpressionD("1-(     -2)\n");       // 3
+    cout << evaluateExpressionD("1-(     -2)^3\n");     // 1-(-8)=9
+    cout << evaluateExpressionD("1*5     -2^3\n");      // 5-8=-3
+    cout << evaluateExpressionD("1*5-(     -2)^3\n");   // 5-(-8)=13
+    cout << evaluateExpressionD("1/44-(     -2)^5\n");  // 32
+    cout << evaluateExpressionD("1-(     -2)^6\n");     // 1-64=-63
+    cout << evaluateExpressionD("1-(     -2)^3\n");     // 1-(-8)=9
+    cout << evaluateExpressionD("1-(     -2)^3^2\n");   // 1-(-2)^9=1-(-512)=513
+    cout << evaluateExpressionD("1-(     -2)^3^2^2\n"); // 1-(-2)^(3^4) - out of bounds
+    cout << evaluateExpressionD("1-(     -2)^2^2^2\n"); // 1-(-2)^16 = 1-65536=-65535
+    cout << evaluateExpressionD("-1+(     -2)^3\n");    // -1+(-8)=-9
+    cout << evaluateExpressionD("(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n");
+    cout << evaluateExpressionD("-(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n");
+    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4))\n");
+    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n");
+    cout << evaluateExpressionD("-(3*(5-(-8)^2-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n");
+    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))\n");
+    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^2\n");
+    cout << evaluateExpressionD("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^3\n");
+    cout << evaluateExpressionD("(-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4))))^2\n");
     cout << "############ part-2 ###############" << endl;
     cout << evaluateExpressionD("1-2-3\n");        //-4
     cout << evaluateExpressionD("1-2^-3\n");       // 1-1/8=0.875
@@ -138,50 +136,50 @@ void test()
     cout << "-------------Important tests--------------" << endl;
     cout << evaluateExpressionD("-(+8 .8 8)+(9)-3 +(2^-5) -(-(+10))-loge(778.887 77)\n"); // 0.493383
     cout << evaluateExpressionD("-(+8 .8 8) -loge(778.887 77)\n");                        // -15.5379
-    cout << evaluateExpressionD("3^ log(4, 4)\n"s);                                       // 3
-    cout << evaluateExpressionD("log 2(3 ^ log(4,4))\n"s);                                // ~1.58
-    cout << evaluateExpressionD("log2(8)\n"s);                                            // 3
-    cout << evaluateExpressionD("log2(6)\n"s);                                            // 2.584
-    cout << evaluateExpressionD("log2(3^log(4,4)+log2(8))\n"s);                           // 2.584
-    cout << evaluateExpressionD("log2(3^log(4,4)+log2(8))^0.8\n"s);                       // 2.13
-    cout << evaluateExpressionD("log2(2)\n"s);                                            // 1
-    cout << evaluateExpressionD("log2(3^log(4,4)+log2(8))^0.8+log2(2)\n"s);               // 3.13
+    cout << evaluateExpressionD("3^ log(4, 4)\n");                                        // 3
+    cout << evaluateExpressionD("log 2(3 ^ log(4,4))\n");                                 // ~1.58
+    cout << evaluateExpressionD("log2(8)\n");                                             // 3
+    cout << evaluateExpressionD("log2(6)\n");                                             // 2.584
+    cout << evaluateExpressionD("log2(3^log(4,4)+log2(8))\n");                            // 2.584
+    cout << evaluateExpressionD("log2(3^log(4,4)+log2(8))^0.8\n");                        // 2.13
+    cout << evaluateExpressionD("log2(2)\n");                                             // 1
+    cout << evaluateExpressionD("log2(3^log(4,4)+log2(8))^0.8+log2(2)\n");                // 3.13
 
-    cout << evaluateExpressionD("log2(3^log2(4)+log2(8))^0.8+log2(2)\n");                                      // 3.77
-    cout << evaluateExpressionD("log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"s);                            // 3.05673
-    cout << evaluateExpressionD("-2^-2^1+log2(2^-4*4)^1^log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"s);     // -0.75
-    cout << evaluateExpressionD("-2^-2^1+log2(2^-4*4)^1^log2(2^log(4,4)+log2(8))^0.8+log2(2)\n"s);             // -0.75
-    cout << evaluateExpressionD("-02^-002^1+log2(2^-004*4)^1^log2(002^log(4,4)+log2(8))^000.08+log2(002)\n"s); // -0.75
+    cout << evaluateExpressionD("log2(3^log2(4)+log2(8))^0.8+log2(2)\n");                                     // 3.77
+    cout << evaluateExpressionD("log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n");                            // 3.05673
+    cout << evaluateExpressionD("-2^-2^1+log2(2^-4*4)^1^log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n");     // -0.75
+    cout << evaluateExpressionD("-2^-2^1+log2(2^-4*4)^1^log2(2^log(4,4)+log2(8))^0.8+log2(2)\n");             // -0.75
+    cout << evaluateExpressionD("-02^-002^1+log2(2^-004*4)^1^log2(002^log(4,4)+log2(8))^000.08+log2(002)\n"); // -0.75
     cout << "--------------------------------------------" << endl;
 
-    cout << evaluateExpressionI("1    + 2  - 0.008\n"s);
-    cout << evaluateExpressionI(" 2-1 + 2 \n"s);
-    cout << evaluateExpressionI("(1+(4+5+2)-3)+(6+8)\n"s);
-    cout << evaluateExpressionI("- 2\n"s);
-    cout << evaluateExpressionI("- (2) - (-3+4 - (6))\n"s);
-    cout << evaluateExpressionI("1\n"s);
-    cout << evaluateExpressionI("1/3*9\n"s);             // 0
-    cout << evaluateExpressionI("9*1/3\n"s);             // 3
-    cout << evaluateExpressionI("1-(     -2)\n"s);       // 3
-    cout << evaluateExpressionI("1-(     -2)^3\n"s);     // 1-(-8)=9
-    cout << evaluateExpressionI("1*5     -2^3\n"s);      // 5-8=-3
-    cout << evaluateExpressionI("1*5-(     -2)^3\n"s);   // 5-(-8)=13
-    cout << evaluateExpressionI("1/44-(     -2)^5\n"s);  // 32
-    cout << evaluateExpressionI("1-(     -2)^6\n"s);     // 1-64=-63
-    cout << evaluateExpressionI("1-(     -2)^3\n"s);     // 1-(-8)=9
-    cout << evaluateExpressionI("1-(     -2)^3^2\n"s);   // 1-(-2)^9=1-(-512)=513
-    cout << evaluateExpressionI("1-(     -2)^3^2^2\n"s); // 1-(-2)^(3^4) - out of bounds
-    cout << evaluateExpressionI("1-(     -2)^2^2^2\n"s); // 1-(-2)^16 = 1-65536=-65535
-    cout << evaluateExpressionI("-1+(     -2)^3\n"s);    // -1+(-8)=-9
-    cout << evaluateExpressionI("(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n"s);
-    cout << evaluateExpressionI("-(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n"s);
-    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4))\n"s);
-    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n"s);
-    cout << evaluateExpressionI("-(3*(5-(-8)^2-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n"s);
-    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))\n"s);
-    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^2\n"s);
-    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^3\n"s);
-    cout << evaluateExpressionI("(-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4))))^2\n"s);
+    cout << evaluateExpressionI("1    + 2  - 0.008\n");
+    cout << evaluateExpressionI(" 2-1 + 2 \n");
+    cout << evaluateExpressionI("(1+(4+5+2)-3)+(6+8)\n");
+    cout << evaluateExpressionI("- 2\n");
+    cout << evaluateExpressionI("- (2) - (-3+4 - (6))\n");
+    cout << evaluateExpressionI("1\n");
+    cout << evaluateExpressionI("1/3*9\n");             // 0
+    cout << evaluateExpressionI("9*1/3\n");             // 3
+    cout << evaluateExpressionI("1-(     -2)\n");       // 3
+    cout << evaluateExpressionI("1-(     -2)^3\n");     // 1-(-8)=9
+    cout << evaluateExpressionI("1*5     -2^3\n");      // 5-8=-3
+    cout << evaluateExpressionI("1*5-(     -2)^3\n");   // 5-(-8)=13
+    cout << evaluateExpressionI("1/44-(     -2)^5\n");  // 32
+    cout << evaluateExpressionI("1-(     -2)^6\n");     // 1-64=-63
+    cout << evaluateExpressionI("1-(     -2)^3\n");     // 1-(-8)=9
+    cout << evaluateExpressionI("1-(     -2)^3^2\n");   // 1-(-2)^9=1-(-512)=513
+    cout << evaluateExpressionI("1-(     -2)^3^2^2\n"); // 1-(-2)^(3^4) - out of bounds
+    cout << evaluateExpressionI("1-(     -2)^2^2^2\n"); // 1-(-2)^16 = 1-65536=-65535
+    cout << evaluateExpressionI("-1+(     -2)^3\n");    // -1+(-8)=-9
+    cout << evaluateExpressionI("(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n");
+    cout << evaluateExpressionI("-(3-(5-(8)-(2+(9-(0-(8-(2))))-(4))-(4)))\n");
+    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4))\n");
+    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n");
+    cout << evaluateExpressionI("-(3*(5-(-8)^2-(-2+(9-(0-(8/(-2))))-(4)))+(-4)^2)\n");
+    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))\n");
+    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^2\n");
+    cout << evaluateExpressionI("-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4)))^3\n");
+    cout << evaluateExpressionI("(-(3*(5-(-8)-(-2+(9-(0-(8/(-2))))-(4))+(-4))))^2\n");
     cout << "############ part-2 ###############" << endl;
     cout << evaluateExpressionI("1-2-3\n");        //-4
     cout << evaluateExpressionI("1-2^-3\n");       // 1-1/8=0.875
@@ -205,19 +203,19 @@ void test()
     cout << "-------------Important tests--------------" << endl;
     cout << evaluateExpressionI("-(+8 .8 8)+(9)-3 +(2^-5) -(-(+10))-loge(778.887 77)\n"); // 0.493383
     cout << evaluateExpressionI("-(+8 .8 8) -loge(778.887 77)\n");                        // -15.5379
-    cout << evaluateExpressionI("3^ log(4, 4)\n"s);                                       // 3
-    cout << evaluateExpressionI("log 2(3 ^ log(4,4))\n"s);                                // ~1.58
-    cout << evaluateExpressionI("log2(8)\n"s);                                            // 3
-    cout << evaluateExpressionI("log2(6)\n"s);                                            // 2.584
-    cout << evaluateExpressionI("log2(3^log(4,4)+log2(8))\n"s);                           // 2.584
-    cout << evaluateExpressionI("log2(3^log(4,4)+log2(8))^0.8\n"s);                       // 2.13
-    cout << evaluateExpressionI("log2(2)\n"s);                                            // 1
-    cout << evaluateExpressionI("log2(3^log(4,4)+log2(8))^0.8+log2(2)\n"s);               // 3.13
+    cout << evaluateExpressionI("3^ log(4, 4)\n");                                        // 3
+    cout << evaluateExpressionI("log 2(3 ^ log(4,4))\n");                                 // ~1.58
+    cout << evaluateExpressionI("log2(8)\n");                                             // 3
+    cout << evaluateExpressionI("log2(6)\n");                                             // 2.584
+    cout << evaluateExpressionI("log2(3^log(4,4)+log2(8))\n");                            // 2.584
+    cout << evaluateExpressionI("log2(3^log(4,4)+log2(8))^0.8\n");                        // 2.13
+    cout << evaluateExpressionI("log2(2)\n");                                             // 1
+    cout << evaluateExpressionI("log2(3^log(4,4)+log2(8))^0.8+log2(2)\n");                // 3.13
 
-    cout << evaluateExpressionI("log2(3^log2(4)+log2(8))^0.8+log2(2)\n");                                  // 3.77
-    cout << evaluateExpressionI("log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"s);                        // 3.05673
-    cout << evaluateExpressionI("-2^-2^1+log2(2^-4*4)^1^log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"s); // -0.75
-    cout << evaluateExpressionI("-2^-2^1+log2(2^-4*4)^1^log2(2^log(4,4)+log2(8))^0.8+log2(2)\n"s);         // -0.75
+    cout << evaluateExpressionI("log2(3^log2(4)+log2(8))^0.8+log2(2)\n");                                 // 3.77
+    cout << evaluateExpressionI("log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n");                        // 3.05673
+    cout << evaluateExpressionI("-2^-2^1+log2(2^-4*4)^1^log2(2^log(loge(555),4)+log2(8))^0.8+log2(2)\n"); // -0.75
+    cout << evaluateExpressionI("-2^-2^1+log2(2^-4*4)^1^log2(2^log(4,4)+log2(8))^0.8+log2(2)\n");         // -0.75
 }
 
 char run()
@@ -277,8 +275,6 @@ int main(int argc, const char *argv[])
     while (run() != 8)
         ;
 }
-
-
 
 // Double tests:
 // 2.992

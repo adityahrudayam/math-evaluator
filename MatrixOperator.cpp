@@ -1,7 +1,12 @@
-#include <iostream>
-#include <fstream>
 #include "MatrixOperator.hpp"
+#include <fstream>
+#include <iostream>
 
+using std::cerr;
+using std::cin;
+using std::cout;
+using std::endl;
+using std::ofstream;
 
 string findOrderOfMinOps(uc dim[], const ui &N)
 {
@@ -39,7 +44,6 @@ string findOrderOfMinOps(uc dim[], const ui &N)
     cout << "Multiplications: " << dp[N - 1] << ", in the order: " << sdp[N - 1] << endl;
     return sdp[N - 1];
 }
-
 
 void takeInputAndEvalLD()
 {
@@ -157,7 +161,7 @@ bool saveLDMToFile(const char *path, MatrixLD &obj) // incomplete
     }
 }
 
-void splitOnSymbol(string &s, const char &symbol) 
+void splitOnSymbol(string &s, const char &symbol)
 {
     ui idx = 0, N = static_cast<ui>(s.length());
     for (ui i = 0; i < s.length(); i++)

@@ -1,24 +1,15 @@
 #pragma once
 
-#include <vector>
-#include <type_traits>
-#include <stack>
 #include "Matrix.hpp"
+#include <stack>
+#include <type_traits>
+#include <vector>
 
-using std::vector;
-using std::cerr;
-using std::cin;
-using std::cout;
-using std::endl;
-using std::fstream;
-using std::ifstream;
-using std::ofstream;
 using std::stack;
-
+using std::vector;
 
 template <class T>
 concept Matrix = std::is_same<T, MatrixLD>::value || std::is_same<T, MatrixLL>::value || std::is_same<T, MatrixBigInteger>::value;
-
 
 template <Matrix T>
 T performOperation(T &n1, T &n2, char &op)
@@ -102,7 +93,6 @@ T matrixExpEval(string &s, vector<T> &vec)
     return operands.top();
 }
 
-
 string findOrderOfMinOps(uc[], const ui &);
 
 template <Matrix T>
@@ -125,7 +115,6 @@ T multiplyAndGetResult(vector<T> &vec)
     string order = findOrderOfMinOps(dim, N + 1);
     return matrixExpEval(order, vec);
 }
-
 
 void takeInputAndEvalLD();
 
